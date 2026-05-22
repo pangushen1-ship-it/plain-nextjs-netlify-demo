@@ -6,747 +6,539 @@
   <title>Rolex 奢侈品腕表商城</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
   <style>
-    /* ===== Global Reset & Base ===== */
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --bg:#111214;--bg-footer:#0c0d0f;--gold:#c9a84c;--gold-hover:#d4b85e;
-      --card:#1a1b1e;--border:#2a2b2e;--text:#fff;--text-sub:#888;--text-dim:#666;
-      --text-slate:#94a3b8;--radius:8px;
-    }
-    html,body{height:100%;font-family:'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-    #app{min-height:100vh;padding-bottom:70px;max-width:480px;margin:0 auto;position:relative}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
-    button{cursor:pointer;border:none;outline:none}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#111214;--bg2:#0c0d0f;--gold:#c9a84c;--gold2:#d4b85e;--card:#1a1b1e;--bd:#2a2b2e;--t1:#fff;--t2:#888;--t3:#666;--t4:#94a3b8;--r:8px}
+html,body{height:100%;font-family:'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased}
+#app{min-height:100vh;padding-bottom:70px;max-width:480px;margin:0 auto;position:relative}
+a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{cursor:pointer;border:none;outline:none}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
 
-    /* ===== Bottom Tab Bar ===== */
-    .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:64px;background:var(--bg-footer);border-top:1px solid var(--border);display:flex;z-index:999}
-    .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--text-sub);transition:.2s}
-    .tab-item.active{color:var(--gold)}
-    .tab-item .tab-icon{font-size:22px}
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:64px;background:var(--bg2);border-top:1px solid var(--bd);display:flex;z-index:999}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--t2);transition:.2s;cursor:pointer}
+.tab-item.active{color:var(--gold)}
+.tab-item .ti{font-size:22px}
 
-    /* ===== Search Bar ===== */
-    .search-bar{padding:12px 16px;position:sticky;top:0;z-index:10;background:var(--bg)}
-    .search-bar .el-input__wrapper{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:20px!important;box-shadow:none!important}
-    .search-bar .el-input__inner{color:#fff!important}
-    .search-bar .el-input__prefix .el-icon{color:var(--text-sub)!important}
+.search-bar{padding:12px 16px;position:sticky;top:0;z-index:10;background:var(--bg)}
+.search-wrap{display:flex;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:8px 14px;gap:8px}
+.search-wrap input{flex:1;background:none;border:none;outline:none;color:#fff;font-size:14px}
+.search-wrap input::placeholder{color:var(--t2)}
+.search-wrap .si{color:var(--t2);font-size:16px}
 
-    /* ===== Banner / Carousel ===== */
-    .banner-section{padding:0 16px;margin-bottom:16px}
-    .banner-carousel .el-carousel__item{border-radius:var(--radius);overflow:hidden}
-    .banner-carousel .el-carousel__item img{width:100%;height:100%;object-fit:cover}
-    .banner-carousel .el-carousel__indicators--horizontal{bottom:10px}
-    .banner-carousel .el-carousel__button{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4)}
-    .banner-carousel .el-carousel__indicator.is-active .el-carousel__button{background:var(--gold);width:20px;border-radius:4px}
+.banner-section{padding:0 16px;margin-bottom:16px}
+.banner-wrap{position:relative;overflow:hidden;border-radius:var(--r);height:180px}
+.banner-track{display:flex;transition:transform .5s ease;height:100%}
+.banner-slide{min-width:100%;height:100%}
+.banner-slide img{width:100%;height:100%;object-fit:cover}
+.banner-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.banner-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:.2s}
+.banner-dot.active{background:var(--gold);width:20px;border-radius:4px}
 
-    /* ===== Quick Actions ===== */
-    .quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px;margin-bottom:20px}
-    .quick-action-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 0;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:.2s}
-    .quick-action-item:hover{border-color:var(--gold);transform:translateY(-2px)}
-    .quick-action-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8893a);display:flex;align-items:center;justify-content:center;font-size:20px}
-    .quick-action-label{font-size:12px;color:var(--text-sub)}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px;margin-bottom:20px}
+.qa-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 0;background:var(--card);border-radius:var(--r);border:1px solid var(--bd);cursor:pointer;transition:.2s}
+.qa-item:hover{border-color:var(--gold);transform:translateY(-2px)}
+.qa-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8893a);display:flex;align-items:center;justify-content:center;font-size:20px}
+.qa-label{font-size:12px;color:var(--t2)}
 
-    /* ===== Product Grid ===== */
-    .section-title{padding:0 16px;margin-bottom:14px;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
-    .section-title .gold-bar{width:4px;height:20px;background:var(--gold);border-radius:2px}
-    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px}
-    .product-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:.25s}
-    .product-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(201,168,76,.12)}
-    .product-card .thumb{width:100%;aspect-ratio:1;background:#222;overflow:hidden;position:relative}
-    .product-card .thumb img{width:100%;height:100%;object-fit:cover;transition:.3s}
-    .product-card:hover .thumb img{transform:scale(1.05)}
-    .product-card .fav-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2;border:none;color:#fff;cursor:pointer}
-    .product-card .fav-btn.faved{color:var(--gold)}
-    .product-card .info{padding:10px}
-    .product-card .info .name{font-size:13px;color:#eee;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;min-height:36px}
-    .product-card .info .price{font-size:16px;font-weight:700;color:var(--gold)}
-    .product-card .info .price small{font-size:11px;font-weight:400}
-    .load-more{text-align:center;padding:20px 16px 30px}
-    .load-more .el-button{border-radius:20px;width:100%}
+.sec-title{padding:0 16px;margin-bottom:14px;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sec-title .bar{width:4px;height:20px;background:var(--gold);border-radius:2px}
 
-    /* ===== Product Detail Dialog ===== */
-    .detail-dialog .el-dialog{background:var(--bg)!important;border:1px solid var(--border);border-radius:12px;max-width:460px;width:95%!important}
-    .detail-dialog .el-dialog__header{display:none}
-    .detail-dialog .el-dialog__body{padding:0!important}
-    .detail-close{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .detail-img{width:100%;aspect-ratio:1;background:#1a1a1a;overflow:hidden}
-    .detail-img img{width:100%;height:100%;object-fit:cover}
-    .detail-body{padding:16px}
-    .detail-body .title{font-size:18px;font-weight:700;margin-bottom:8px}
-    .detail-body .desc{color:var(--text-sub);font-size:13px;line-height:1.6;margin-bottom:12px}
-    .detail-body .price-row{font-size:24px;font-weight:700;color:var(--gold);margin-bottom:16px}
-    .size-options{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-    .size-options .size-btn{padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-sub);font-size:13px;cursor:pointer;transition:.2s}
-    .size-options .size-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
-    .detail-actions{display:flex;gap:10px}
-    .detail-actions .el-button{flex:1;border-radius:20px;height:44px;font-size:15px}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px}
+.p-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.25s}
+.p-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(201,168,76,.12)}
+.p-card .thumb{width:100%;aspect-ratio:1;background:#222;overflow:hidden;position:relative}
+.p-card .thumb img{width:100%;height:100%;object-fit:cover;transition:.3s}
+.p-card:hover .thumb img{transform:scale(1.05)}
+.p-card .fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2;border:none;color:#fff;cursor:pointer}
+.p-card .fav.on{color:var(--gold)}
+.p-card .info{padding:10px}
+.p-card .info .name{font-size:13px;color:#eee;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;min-height:36px}
+.p-card .info .price{font-size:16px;font-weight:700;color:var(--gold)}
+.p-card .info .price small{font-size:11px;font-weight:400}
+.load-more{text-align:center;padding:20px 16px 30px}
 
-    /* ===== Recycle Page ===== */
-    .recycle-cats{padding:0 16px;margin-bottom:16px}
-    .recycle-cat-item{display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;cursor:pointer;transition:.2s}
-    .recycle-cat-item:hover{border-color:var(--gold)}
-    .recycle-cat-item .left{display:flex;align-items:center;gap:12px;font-size:15px}
-    .recycle-cat-item .emoji{font-size:24px}
-    .recycle-cat-item .arrow{color:var(--text-sub);font-size:18px}
-    .estimate-btn{margin:0 16px 20px;text-align:center}
-    .estimate-btn .el-button{width:100%;height:50px;font-size:17px;border-radius:var(--radius);font-weight:700}
-    .service-features{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px;margin-bottom:24px}
-    .service-feature{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;text-align:center}
-    .service-feature .icon{font-size:28px;margin-bottom:8px}
-    .service-feature .label{font-size:14px;font-weight:600;margin-bottom:4px}
-    .service-feature .sub{font-size:11px;color:var(--text-sub)}
-    .recycle-flow{padding:0 16px 24px}
-    .flow-steps{display:flex;flex-direction:column;gap:14px}
-    .flow-step{display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
-    .flow-step .num{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#000;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-    .flow-step .step-info .step-title{font-size:14px;font-weight:600;margin-bottom:2px}
-    .flow-step .step-info .step-desc{font-size:12px;color:var(--text-sub)}
+.skel{background:linear-gradient(90deg,var(--card) 25%,#242528 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-    /* ===== VIP Page ===== */
-    .vip-card{margin:16px;padding:24px;background:linear-gradient(135deg,#1c1d20,#2a2520);border:1px solid var(--gold);border-radius:12px;position:relative;overflow:hidden}
-    .vip-card::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(201,168,76,.15),transparent);pointer-events:none}
-    .vip-card .level{font-size:22px;font-weight:700;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-    .vip-card .level .crown{font-size:24px}
-    .vip-stats{display:flex;gap:16px;margin-bottom:16px}
-    .vip-stat{text-align:center;flex:1}
-    .vip-stat .val{font-size:20px;font-weight:700;color:var(--gold)}
-    .vip-stat .lbl{font-size:11px;color:var(--text-sub);margin-top:2px}
-    .vip-progress{margin-bottom:6px}
-    .vip-progress .el-progress__text{color:var(--gold)!important;font-size:12px!important}
-    .vip-progress .el-progress-bar__outer{background:var(--border)!important;border-radius:10px!important}
-    .vip-progress .el-progress-bar__inner{background:linear-gradient(90deg,var(--gold),#d4b85e)!important;border-radius:10px!important}
-    .vip-upgrade-text{font-size:12px;color:var(--text-sub);text-align:center}
-    .vip-benefits{padding:0 16px;margin-bottom:20px}
-    .vip-benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .vip-benefit{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 8px;text-align:center;transition:.2s}
-    .vip-benefit:hover{border-color:var(--gold)}
-    .vip-benefit .b-icon{font-size:28px;margin-bottom:6px}
-    .vip-benefit .b-name{font-size:12px;color:#ccc}
-    .invite-section{padding:0 16px 24px}
-    .invite-section .el-button{width:100%;height:48px;border-radius:var(--radius);font-size:16px;font-weight:600}
+/* Detail */
+.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+.detail-panel{background:var(--bg);border:1px solid var(--bd);border-radius:12px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.detail-close{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.detail-img{width:100%;aspect-ratio:1;background:#1a1a1a;overflow:hidden}
+.detail-img img{width:100%;height:100%;object-fit:cover}
+.detail-body{padding:16px}
+.detail-body .dt{font-size:18px;font-weight:700;margin-bottom:8px}
+.detail-body .dd{color:var(--t2);font-size:13px;line-height:1.6;margin-bottom:12px}
+.detail-body .dp{font-size:24px;font-weight:700;color:var(--gold);margin-bottom:16px}
+.size-opts{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.size-btn{padding:6px 16px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--t2);font-size:13px;cursor:pointer;transition:.2s}
+.size-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+.detail-btns{display:flex;gap:10px}
+.detail-btns button{flex:1;height:44px;border-radius:20px;font-size:15px;font-weight:600;border:none;cursor:pointer}
+.btn-cart{background:var(--card);color:#fff;border:1px solid var(--bd)!important}
+.btn-buy{background:var(--gold);color:#000}
 
-    /* ===== User Page ===== */
-    .user-header{padding:30px 16px 20px;display:flex;align-items:center;gap:16px}
-    .user-header .avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;flex-shrink:0}
-    .user-header .avatar img{width:100%;height:100%;object-fit:cover}
-    .user-header .info .name{font-size:18px;font-weight:700}
-    .user-header .info .badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;background:linear-gradient(90deg,var(--gold),#a8893a);color:#000;margin-top:4px;font-weight:600}
-    .info-card{margin:0 16px 14px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
-    .info-card .row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
-    .info-card .row .label{color:var(--text-sub)}
-    .asset-card{margin:0 16px 14px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
-    .asset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;margin-bottom:12px}
-    .asset-item .val{font-size:20px;font-weight:700;color:var(--gold)}
-    .asset-item .lbl{font-size:12px;color:var(--text-sub);margin-top:2px}
-    .order-tabs{margin:0 16px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    .order-tab{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 0;text-align:center;cursor:pointer;transition:.2s}
-    .order-tab:hover{border-color:var(--gold)}
-    .order-tab .icon{font-size:22px;margin-bottom:4px}
-    .order-tab .text{font-size:12px;color:var(--text-sub)}
-    .func-list{margin:0 16px 24px}
-    .func-item{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:.2s}
-    .func-item:hover{border-color:var(--gold)}
-    .func-item .left{display:flex;align-items:center;gap:12px;font-size:14px}
-    .func-item .left .fi{font-size:18px}
-    .func-item .arrow{color:var(--text-sub)}
+/* Recycle */
+.rc-item{display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);margin:0 16px 10px;cursor:pointer;transition:.2s}
+.rc-item:hover{border-color:var(--gold)}
+.rc-left{display:flex;align-items:center;gap:12px;font-size:15px}
+.rc-emoji{font-size:24px}
+.rc-arrow{color:var(--t2);font-size:18px}
+.est-btn{margin:6px 16px 20px}
+.est-btn button{width:100%;height:50px;font-size:17px;border-radius:var(--r);font-weight:700;background:var(--gold);color:#000;border:none}
+.sf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px;margin-bottom:24px}
+.sf-item{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:18px 14px;text-align:center}
+.sf-icon{font-size:28px;margin-bottom:8px}
+.sf-label{font-size:14px;font-weight:600;margin-bottom:4px}
+.sf-sub{font-size:11px;color:var(--t2)}
+.flow-steps{display:flex;flex-direction:column;gap:14px;padding:0 16px 24px}
+.flow-step{display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r)}
+.flow-num{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#000;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.step-t{font-size:14px;font-weight:600;margin-bottom:2px}
+.step-d{font-size:12px;color:var(--t2)}
 
-    /* ===== Checkin Page ===== */
-    .checkin-header{padding:20px 16px;text-align:center}
-    .checkin-header .streak{font-size:36px;font-weight:700;color:var(--gold)}
-    .checkin-header .streak-label{font-size:13px;color:var(--text-sub);margin-top:4px}
-    .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:0 16px;margin-bottom:20px}
-    .calendar-day-header{text-align:center;font-size:12px;color:var(--text-sub);padding:6px 0}
-    .calendar-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:var(--radius);font-size:13px;color:var(--text-dim);background:var(--card);border:1px solid var(--border);position:relative}
-    .calendar-day.today{border-color:var(--gold);color:var(--gold);font-weight:700}
-    .calendar-day.checked{background:var(--gold);color:#000;font-weight:700;border-color:var(--gold);animation:goldPulse 2s infinite}
-    .calendar-day.empty{background:transparent;border:none}
-    .calendar-day.future{opacity:.4}
-    @keyframes goldPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)}50%{box-shadow:0 0 12px 4px rgba(201,168,76,.25)}}
-    .checkin-btn-wrap{padding:0 16px;margin-bottom:24px}
-    .checkin-btn-wrap .el-button{width:100%;height:50px;font-size:17px;border-radius:var(--radius);font-weight:700}
+/* VIP */
+.vip-card{margin:16px;padding:24px;background:linear-gradient(135deg,#1c1d20,#2a2520);border:1px solid var(--gold);border-radius:12px;position:relative;overflow:hidden}
+.vip-card::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(201,168,76,.15),transparent);pointer-events:none}
+.vip-level{font-size:22px;font-weight:700;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.vip-stats{display:flex;gap:16px;margin-bottom:16px}
+.vs{text-align:center;flex:1}
+.vs .vv{font-size:20px;font-weight:700;color:var(--gold)}
+.vs .vl{font-size:11px;color:var(--t2);margin-top:2px}
+.vip-prog{margin:0 16px 6px;height:10px;background:var(--bd);border-radius:10px;overflow:hidden}
+.vip-prog-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:10px;transition:width .5s}
+.vip-prog-text{text-align:center;font-size:12px;color:var(--t2);margin-bottom:16px}
+.vb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px;margin-bottom:20px}
+.vb-item{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:16px 8px;text-align:center;transition:.2s}
+.vb-item:hover{border-color:var(--gold)}
+.vb-icon{font-size:28px;margin-bottom:6px}
+.vb-name{font-size:12px;color:#ccc}
+.invite-sec{padding:0 16px 24px}
+.invite-sec button{width:100%;height:48px;border-radius:var(--r);font-size:16px;font-weight:600;background:var(--gold);color:#000;border:none;margin-top:10px}
 
-    /* ===== Cart Drawer ===== */
-    .cart-drawer .el-drawer{background:var(--bg)!important;border-left:1px solid var(--border)}
-    .cart-drawer .el-drawer__header{border-bottom:1px solid var(--border);margin-bottom:0;padding:16px 20px}
-    .cart-drawer .el-drawer__title{color:#fff!important;font-size:16px}
-    .cart-item{display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border)}
-    .cart-item .ci-img{width:80px;height:80px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#222}
-    .cart-item .ci-img img{width:100%;height:100%;object-fit:cover}
-    .cart-item .ci-info{flex:1;display:flex;flex-direction:column;justify-content:space-between}
-    .cart-item .ci-name{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .cart-item .ci-price{color:var(--gold);font-weight:700;font-size:15px}
-    .cart-item .ci-actions{display:flex;align-items:center;gap:8px}
-    .cart-item .ci-actions button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center}
-    .cart-item .ci-actions .qty{font-size:14px;min-width:20px;text-align:center}
-    .cart-item .ci-del{color:#ff4d4f;cursor:pointer;font-size:14px;margin-left:8px}
-    .cart-footer{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:var(--bg-footer);border-top:1px solid var(--border)}
-    .cart-footer .total{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:16px}
-    .cart-footer .total .amount{color:var(--gold);font-size:22px;font-weight:700}
-    .cart-footer .el-button{width:100%;height:46px;border-radius:var(--radius);font-size:16px;font-weight:600}
-    .cart-empty{text-align:center;padding:60px 20px;color:var(--text-sub)}
-    .cart-empty .icon{font-size:48px;margin-bottom:12px;opacity:.3}
-    .cart-empty .text{font-size:14px}
+/* User */
+.u-header{padding:30px 16px 20px;display:flex;align-items:center;gap:16px}
+.u-avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;flex-shrink:0}
+.u-avatar img{width:100%;height:100%;object-fit:cover}
+.u-name{font-size:18px;font-weight:700}
+.u-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;background:linear-gradient(90deg,var(--gold),#a8893a);color:#000;margin-top:4px;font-weight:600}
+.u-login-btn{margin-top:6px;padding:6px 20px;border-radius:14px;background:var(--gold);color:#000;font-size:13px;font-weight:600;border:none}
+.info-card{margin:0 16px 14px;padding:16px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r)}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
+.info-row .lbl{color:var(--t2)}
+.asset-card{margin:0 16px 14px;padding:16px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r)}
+.asset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;margin-bottom:12px}
+.asset-val{font-size:20px;font-weight:700;color:var(--gold)}
+.asset-lbl{font-size:12px;color:var(--t2);margin-top:2px}
+.asset-btn{width:100%;padding:8px;border-radius:var(--r);background:var(--gold);color:#000;font-weight:600;border:none;font-size:14px}
+.order-tabs{margin:0 16px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.order-tab{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px 0;text-align:center;cursor:pointer;transition:.2s}
+.order-tab:hover{border-color:var(--gold)}
+.order-tab .oi{font-size:22px;margin-bottom:4px}
+.order-tab .ot{font-size:12px;color:var(--t2)}
+.func-list{margin:0 16px 24px}
+.func-item{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:.2s}
+.func-item:hover{border-color:var(--gold)}
+.func-left{display:flex;align-items:center;gap:12px;font-size:14px}
+.func-left .fi{font-size:18px}
+.func-arrow{color:var(--t2)}
 
-    /* ===== Login Dialog ===== */
-    .login-dialog .el-dialog{background:var(--bg)!important;border:1px solid var(--border);border-radius:12px;max-width:400px;width:92%!important}
-    .login-dialog .el-dialog__header{border-bottom:1px solid var(--border)}
-    .login-dialog .el-dialog__title{color:#fff!important}
-    .login-dialog .el-dialog__body{padding:24px!important}
-    .login-dialog .el-input__wrapper{background:var(--card)!important;border:1px solid var(--border)!important;box-shadow:none!important}
-    .login-dialog .el-input__inner{color:#fff!important}
-    .login-dialog .el-form-item__label{color:var(--text-sub)!important}
-    .login-dialog .switch-link{text-align:center;margin-top:16px;font-size:13px;color:var(--text-slate)}
-    .login-dialog .switch-link a{color:var(--gold);cursor:pointer;margin-left:4px}
+/* Checkin */
+.ck-header{padding:20px 16px;text-align:center}
+.ck-num{font-size:36px;font-weight:700;color:var(--gold)}
+.ck-lbl{font-size:13px;color:var(--t2);margin-top:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:0 16px;margin-bottom:20px}
+.cal-hdr{text-align:center;font-size:12px;color:var(--t2);padding:6px 0}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:var(--r);font-size:13px;color:var(--t3);background:var(--card);border:1px solid var(--bd)}
+.cal-day.today{border-color:var(--gold);color:var(--gold);font-weight:700}
+.cal-day.checked{background:var(--gold);color:#000;font-weight:700;border-color:var(--gold);animation:gp 2s infinite}
+.cal-day.empty{background:transparent;border:none}
+.cal-day.future{opacity:.4}
+@keyframes gp{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)}50%{box-shadow:0 0 12px 4px rgba(201,168,76,.25)}}
+.ck-btn{margin:0 16px 24px}
+.ck-btn button{width:100%;height:50px;font-size:17px;border-radius:var(--r);font-weight:700;background:var(--gold);color:#000;border:none}
+.ck-btn button:disabled{background:var(--bd);color:var(--t2)}
 
-    /* ===== Page Title ===== */
-    .page-top-title{padding:16px;font-size:20px;font-weight:700;background:linear-gradient(180deg,rgba(201,168,76,.08),transparent);text-align:center;letter-spacing:1px}
+/* Cart Drawer */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000}
+.cart-panel{position:fixed;top:0;right:0;bottom:0;width:85%;max-width:400px;background:var(--bg);z-index:1001;display:flex;flex-direction:column;border-left:1px solid var(--bd)}
+.cart-header{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.cart-header h3{font-size:16px}
+.cart-close{background:none;color:var(--t2);font-size:24px;cursor:pointer;border:none}
+.cart-body{flex:1;overflow-y:auto;padding-bottom:140px}
+.ci{display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid var(--bd)}
+.ci-img{width:80px;height:80px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#222}
+.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.ci-name{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci-price{color:var(--gold);font-weight:700;font-size:15px}
+.ci-acts{display:flex;align-items:center;gap:8px}
+.ci-acts button{width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center}
+.ci-qty{font-size:14px;min-width:20px;text-align:center}
+.ci-del{color:#ff4d4f;cursor:pointer;font-size:13px;margin-left:8px}
+.cart-footer{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:var(--bg2);border-top:1px solid var(--bd)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:16px}
+.cart-total .amt{color:var(--gold);font-size:22px;font-weight:700}
+.cart-checkout{width:100%;height:46px;border-radius:var(--r);font-size:16px;font-weight:600;background:var(--gold);color:#000;border:none}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--t2)}
+.cart-empty .ce-icon{font-size:48px;opacity:.3;margin-bottom:12px}
 
-    /* ===== Utilities ===== */
-    .gold-text{color:var(--gold)}
-    .el-button--primary{--el-button-bg-color:var(--gold)!important;--el-button-border-color:var(--gold)!important;--el-button-text-color:#000!important;--el-button-hover-bg-color:var(--gold-hover)!important;--el-button-hover-border-color:var(--gold-hover)!important;--el-button-hover-text-color:#000!important}
-    .el-button--default{--el-button-bg-color:var(--card)!important;--el-button-border-color:var(--border)!important;--el-button-text-color:#fff!important;--el-button-hover-bg-color:#222!important;--el-button-hover-border-color:var(--gold)!important;--el-button-hover-text-color:var(--gold)!important}
-    .skeleton-box{background:linear-gradient(90deg,var(--card) 25%,#242528 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius)}
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Login */
+.login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+.login-panel{background:var(--bg);border:1px solid var(--bd);border-radius:12px;max-width:400px;width:100%;padding:0}
+.login-header{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.login-header h3{font-size:16px}
+.login-close{background:none;color:var(--t2);font-size:20px;cursor:pointer;border:none}
+.login-body{padding:24px 20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;color:var(--t2);margin-bottom:6px}
+.form-group input{width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);color:#fff;font-size:14px;outline:none}
+.form-group input:focus{border-color:var(--gold)}
+.code-row{display:flex;gap:10px}
+.code-row input{flex:1}
+.code-btn{padding:10px 16px;background:var(--gold);color:#000;border:none;border-radius:var(--r);font-size:13px;font-weight:600;white-space:nowrap;min-width:100px}
+.code-btn:disabled{background:var(--bd);color:var(--t2)}
+.login-submit{width:100%;height:44px;border-radius:var(--r);font-size:16px;font-weight:600;background:var(--gold);color:#000;border:none;margin-top:8px}
+.switch-link{text-align:center;margin-top:16px;font-size:13px;color:var(--t4)}
+.switch-link a{color:var(--gold);cursor:pointer;margin-left:4px}
 
-    /* ===== i18n toggle ===== */
-    .lang-toggle{position:fixed;top:10px;right:10px;z-index:1001;padding:4px 10px;border-radius:14px;background:var(--card);border:1px solid var(--border);color:var(--text-sub);font-size:12px;cursor:pointer;transition:.2s}
-    .lang-toggle:hover{border-color:var(--gold);color:var(--gold)}
-
-    /* ===== Scrollbar ===== */
-    ::-webkit-scrollbar{width:4px}
-    ::-webkit-scrollbar-track{background:transparent}
-    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.page-title{padding:16px;font-size:20px;font-weight:700;background:linear-gradient(180deg,rgba(201,168,76,.08),transparent);text-align:center;letter-spacing:1px}
+.lang-toggle{position:fixed;top:10px;right:10px;z-index:1001;padding:4px 10px;border-radius:14px;background:var(--card);border:1px solid var(--bd);color:var(--t2);font-size:12px;cursor:pointer;transition:.2s}
+.lang-toggle:hover{border-color:var(--gold);color:var(--gold)}
   </style>
 </head>
 <body>
-<div id="app">
-  <!-- Language Toggle -->
-  <button class="lang-toggle" @click="toggleLang">{{ lang === 'zh' ? 'EN' : '中文' }}</button>
+<div id="app"></div>
 
-  <!-- Router View -->
-  <router-view v-slot="{ Component }">
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
-  </router-view>
-
-  <!-- Bottom Tab Bar -->
-  <nav class="tab-bar">
-    <div v-for="tab in tabs" :key="tab.path" class="tab-item" :class="{active: currentTab === tab.path}" @click="$router.push(tab.path)">
-      <span class="tab-icon">{{ tab.icon }}</span>
-      <span>{{ t(tab.label) }}</span>
-    </div>
-  </nav>
-
-  <!-- Product Detail Dialog -->
-  <el-dialog v-model="detailVisible" custom-class="detail-dialog" :show-close="false" align-center destroy-on-close>
-    <div v-if="detailProduct" style="position:relative">
-      <div class="detail-close" @click="detailVisible=false">✕</div>
-      <div class="detail-img">
-        <img :src="detailProduct.thumbnail || 'https://placehold.co/400x400/1a1b1e/c9a84c?text=ROLEX'" :alt="detailProduct.title">
-      </div>
-      <div class="detail-body">
-        <div class="title">{{ detailProduct.title }}</div>
-        <div class="desc">{{ detailProduct.description || t('noDesc') }}</div>
-        <div class="price-row">¥{{ formatPrice(detailProduct) }}</div>
-        <div class="size-options">
-          <span v-for="s in sizes" :key="s" class="size-btn" :class="{active: selectedSize===s}" @click="selectedSize=s">{{ s }}</span>
-        </div>
-        <div class="detail-actions">
-          <el-button type="default" @click="addToCart(detailProduct)">{{ t('addCart') }}</el-button>
-          <el-button type="primary" @click="addToCart(detailProduct);cartVisible=true">{{ t('buyNow') }}</el-button>
-        </div>
-      </div>
-    </div>
-  </el-dialog>
-
-  <!-- Cart Drawer -->
-  <el-drawer v-model="cartVisible" direction="rtl" size="85%" custom-class="cart-drawer" :title="t('cart')">
-    <div v-if="cart.length === 0" class="cart-empty">
-      <div class="icon">🛒</div>
-      <div class="text">{{ t('cartEmpty') }}</div>
-    </div>
-    <div v-else style="padding-bottom:140px">
-      <div v-for="(item,idx) in cart" :key="idx" class="cart-item">
-        <div class="ci-img"><img :src="item.thumbnail || 'https://placehold.co/80x80/1a1b1e/c9a84c?text=R'" :alt="item.title"></div>
-        <div class="ci-info">
-          <div class="ci-name">{{ item.title }}</div>
-          <div class="ci-price">¥{{ item.displayPrice }}</div>
-          <div class="ci-actions">
-            <button @click="changeQty(idx,-1)">−</button>
-            <span class="qty">{{ item.qty }}</span>
-            <button @click="changeQty(idx,1)">+</button>
-            <span class="ci-del" @click="removeFromCart(idx)">{{ t('delete') }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-if="cart.length>0" class="cart-footer">
-      <div class="total"><span>{{ t('total') }}</span><span class="amount">¥{{ cartTotal }}</span></div>
-      <el-button type="primary" @click="ElMessage.success(t('orderSuccess'));cart=[];saveCart()">{{ t('checkout') }}</el-button>
-    </div>
-  </el-drawer>
-
-  <!-- Login Dialog -->
-  <el-dialog v-model="loginVisible" custom-class="login-dialog" :title="loginMode==='login'? t('login') : loginMode==='register'? t('register') : t('forgotPwd')" width="92%" align-center>
-    <el-form label-position="top">
-      <el-form-item :label="t('phone')">
-        <el-input v-model="loginForm.phone" :placeholder="t('phonePh')" prefix-icon="Phone" />
-      </el-form-item>
-      <el-form-item v-if="loginMode!=='forgot'" :label="t('password')">
-        <el-input v-model="loginForm.password" type="password" :placeholder="t('pwdPh')" show-password prefix-icon="Lock" />
-      </el-form-item>
-      <el-form-item :label="t('smsCode')">
-        <div style="display:flex;gap:10px;width:100%">
-          <el-input v-model="loginForm.code" :placeholder="t('codePh')" style="flex:1" />
-          <el-button type="primary" :disabled="codeCd>0" @click="sendCode" style="min-width:110px">
-            {{ codeCd > 0 ? codeCd + 's' : t('getCode') }}
-          </el-button>
-        </div>
-      </el-form-item>
-      <el-button type="primary" style="width:100%;height:44px;border-radius:var(--radius);font-size:16px;font-weight:600" @click="handleLogin">
-        {{ loginMode==='login'? t('login') : loginMode==='register'? t('register') : t('resetPwd') }}
-      </el-button>
-      <div class="switch-link" v-if="loginMode==='login'">
-        {{ t('noAccount') }}<a @click="loginMode='register'">{{ t('register') }}</a>
-        <span style="margin:0 8px">|</span>
-        <a @click="loginMode='forgot'">{{ t('forgotPwd') }}</a>
-      </div>
-      <div class="switch-link" v-else>
-        {{ t('hasAccount') }}<a @click="loginMode='login'">{{ t('login') }}</a>
-      </div>
-    </el-form>
-  </el-dialog>
-</div>
-
-<!-- CDN Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router@4.5.0/dist/vue-router.global.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pinia@2.3.1/dist/pinia.iife.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
-
 <script>
-const { createApp, ref, computed, reactive, onMounted, watch, nextTick, defineComponent } = Vue;
+const { createApp, ref, computed, reactive, onMounted, watch, defineComponent, provide, inject, h } = Vue;
 const { createRouter, createWebHashHistory, useRouter, useRoute } = VueRouter;
-const { createPinia } = Pinia;
-const { ElMessage } = ElementPlus;
 
 // ===== i18n =====
-const messages = {
+const msgs = {
   zh: {
-    home:'首页',recycle:'回收',vip:'VIP',user:'个人',
-    search:'搜索腕表...',hotProducts:'热门腕表',loadMore:'加载更多',
-    addCart:'加入购物车',buyNow:'立即购买',cart:'购物车',cartEmpty:'购物车空空如也',
-    total:'合计',checkout:'结算',delete:'删除',orderSuccess:'下单成功！',
-    login:'登录',register:'注册',forgotPwd:'忘记密码',resetPwd:'重置密码',
-    phone:'手机号',phonePh:'请输入手机号',password:'密码',pwdPh:'请输入密码',
-    smsCode:'验证码',codePh:'请输入验证码',getCode:'获取验证码',
-    noAccount:'还没有账号？',hasAccount:'已有账号？',
-    noDesc:'暂无描述',
-    // Quick actions
+    home:'首页',recycle:'回收',vip:'VIP',user:'个人',search:'搜索腕表...',hotProducts:'热门腕表',loadMore:'加载更多',noMore:'没有更多了',
+    addCart:'加入购物车',buyNow:'立即购买',cart:'购物车',cartEmpty:'购物车空空如也',total:'合计',checkout:'结算',delete:'删除',orderSuccess:'下单成功！',
+    login:'登录',register:'注册',forgotPwd:'忘记密码',resetPwd:'重置密码',phone:'手机号',phonePh:'请输入手机号',password:'密码',pwdPh:'请输入密码',
+    smsCode:'验证码',codePh:'请输入验证码',getCode:'获取验证码',noAccount:'还没有账号？',hasAccount:'已有账号？',noDesc:'暂无描述',
     favorites:'收藏',orders:'订单',checkin:'签到',service:'服务',points:'积分',vipCenter:'VIP',
-    // Recycle
     recycleTitle:'回收服务',watchRecycle:'名表回收',bagRecycle:'箱包回收',jewelryRecycle:'首饰回收',
     freeEstimate:'免费估价',featureServices:'特色服务',
     freeDiagnose:'免费鉴定',cashPayment:'现金打款',proTeam:'专业团队',privacyProtect:'隐私保护',
-    freeDiagnoseDesc:'专业鉴定师免费鉴定',cashPaymentDesc:'当天打款到账',
-    proTeamDesc:'十年行业经验',privacyProtectDesc:'全程保密交易',
-    recycleFlow:'回收流程',
-    step1:'在线提交',step1d:'填写商品信息提交估价',
-    step2:'专业评估',step2d:'鉴定师评估商品价值',
-    step3:'确认价格',step3d:'双方确认回收价格',
-    step4:'完成交易',step4d:'签订合同打款完成',
-    // VIP
-    vipLevel:'黄金会员',vipPoints:'积分',growth:'成长值',nextLevel:'升级至铂金会员',
-    vipBenefits:'VIP权益',
-    b1:'专属折扣',b2:'生日礼',b3:'优先购',b4:'免邮',b5:'专属客服',b6:'限量款',
+    freeDiagnoseD:'专业鉴定师免费鉴定',cashPaymentD:'当天打款到账',proTeamD:'十年行业经验',privacyProtectD:'全程保密交易',
+    recycleFlow:'回收流程',s1:'在线提交',s1d:'填写商品信息提交估价',s2:'专业评估',s2d:'鉴定师评估商品价值',
+    s3:'确认价格',s3d:'双方确认回收价格',s4:'完成交易',s4d:'签订合同打款完成',
+    vipLevel:'黄金会员',vipPoints:'积分',growth:'成长值',nextLevel:'升级至铂金会员还需680成长值',
+    vipBenefits:'VIP权益',b1:'专属折扣',b2:'生日礼',b3:'优先购',b4:'免邮',b5:'专属客服',b6:'限量款',
     inviteFriends:'邀请好友',inviteDesc:'邀请好友注册，双方各获100积分',
-    // User
-    userId:'用户ID',realName:'姓名',mobile:'手机',
-    balance:'余额',coupon:'优惠券',withdraw:'提现',
+    userId:'用户ID',realName:'姓名',mobile:'手机',balance:'余额',coupon:'优惠券',withdraw:'提现',
     allOrders:'全部',unpaid:'待付款',unshipped:'待发货',unreceived:'待收货',
     address:'收货地址',security:'安全设置',about:'关于我们',contact:'联系客服',
-    // Checkin
     checkinTitle:'签到中心',consecutiveDays:'连续签到天数',checkinBtn:'立即签到',checkedIn:'已签到',
-    checkinSuccess:'签到成功！+10积分',alreadyCheckedIn:'今日已签到',
+    checkinOk:'签到成功！+10积分',alreadyDone:'今日已签到',
     sun:'日',mon:'一',tue:'二',wed:'三',thu:'四',fri:'五',sat:'六',
-    loading:'加载中...',noMore:'没有更多了',loginFirst:'请先登录',
-    codeSent:'验证码已发送',loginSuccess:'登录成功',registerSuccess:'注册成功'
+    added:'已加入购物车',codeSent:'验证码已发送',loginOk:'登录成功',regOk:'注册成功',loginFirst:'请先登录'
   },
   en: {
-    home:'Home',recycle:'Recycle',vip:'VIP',user:'Profile',
-    search:'Search watches...',hotProducts:'Hot Watches',loadMore:'Load More',
-    addCart:'Add to Cart',buyNow:'Buy Now',cart:'Cart',cartEmpty:'Your cart is empty',
-    total:'Total',checkout:'Checkout',delete:'Remove',orderSuccess:'Order placed!',
-    login:'Login',register:'Register',forgotPwd:'Forgot Password',resetPwd:'Reset',
-    phone:'Phone',phonePh:'Enter phone number',password:'Password',pwdPh:'Enter password',
-    smsCode:'SMS Code',codePh:'Enter code',getCode:'Get Code',
-    noAccount:"Don't have an account?",hasAccount:'Already have an account?',
-    noDesc:'No description available',
+    home:'Home',recycle:'Recycle',vip:'VIP',user:'Profile',search:'Search watches...',hotProducts:'Hot Watches',loadMore:'Load More',noMore:'No more',
+    addCart:'Add to Cart',buyNow:'Buy Now',cart:'Cart',cartEmpty:'Your cart is empty',total:'Total',checkout:'Checkout',delete:'Remove',orderSuccess:'Order placed!',
+    login:'Login',register:'Register',forgotPwd:'Forgot Password',resetPwd:'Reset',phone:'Phone',phonePh:'Enter phone',password:'Password',pwdPh:'Enter password',
+    smsCode:'SMS Code',codePh:'Enter code',getCode:'Get Code',noAccount:"No account?",hasAccount:'Have an account?',noDesc:'No description',
     favorites:'Favorites',orders:'Orders',checkin:'Check-in',service:'Service',points:'Points',vipCenter:'VIP',
-    recycleTitle:'Recycling Service',watchRecycle:'Watch Recycling',bagRecycle:'Bag Recycling',jewelryRecycle:'Jewelry Recycling',
+    recycleTitle:'Recycling',watchRecycle:'Watch Recycling',bagRecycle:'Bag Recycling',jewelryRecycle:'Jewelry Recycling',
     freeEstimate:'Free Estimate',featureServices:'Featured Services',
     freeDiagnose:'Free Appraisal',cashPayment:'Cash Payment',proTeam:'Pro Team',privacyProtect:'Privacy',
-    freeDiagnoseDesc:'Professional free appraisal',cashPaymentDesc:'Same day payment',
-    proTeamDesc:'10 years experience',privacyProtectDesc:'Confidential transaction',
-    recycleFlow:'Recycling Process',
-    step1:'Submit Online',step1d:'Fill in product info for estimate',
-    step2:'Professional Evaluation',step2d:'Expert evaluates product value',
-    step3:'Confirm Price',step3d:'Both parties confirm price',
-    step4:'Complete Transaction',step4d:'Sign contract and receive payment',
-    vipLevel:'Gold Member',vipPoints:'Points',growth:'Growth',nextLevel:'Upgrade to Platinum',
-    vipBenefits:'VIP Benefits',
-    b1:'Exclusive Discount',b2:'Birthday Gift',b3:'Priority Purchase',b4:'Free Shipping',b5:'VIP Support',b6:'Limited Edition',
+    freeDiagnoseD:'Professional free appraisal',cashPaymentD:'Same day payment',proTeamD:'10 years experience',privacyProtectD:'Confidential',
+    recycleFlow:'Process',s1:'Submit',s1d:'Fill in product info',s2:'Evaluate',s2d:'Expert evaluation',
+    s3:'Confirm',s3d:'Confirm price',s4:'Complete',s4d:'Sign and pay',
+    vipLevel:'Gold Member',vipPoints:'Points',growth:'Growth',nextLevel:'680 growth to Platinum',
+    vipBenefits:'VIP Benefits',b1:'Discount',b2:'Birthday Gift',b3:'Priority',b4:'Free Ship',b5:'VIP Support',b6:'Limited',
     inviteFriends:'Invite Friends',inviteDesc:'Invite friends, both get 100 points',
-    userId:'User ID',realName:'Name',mobile:'Phone',
-    balance:'Balance',coupon:'Coupons',withdraw:'Withdraw',
-    allOrders:'All',unpaid:'Unpaid',unshipped:'Unshipped',unreceived:'To Receive',
-    address:'Address',security:'Security',about:'About Us',contact:'Support',
-    checkinTitle:'Check-in Center',consecutiveDays:'Consecutive Days',checkinBtn:'Check In Now',checkedIn:'Checked In',
-    checkinSuccess:'Checked in! +10 points',alreadyCheckedIn:'Already checked in today',
+    userId:'User ID',realName:'Name',mobile:'Phone',balance:'Balance',coupon:'Coupons',withdraw:'Withdraw',
+    allOrders:'All',unpaid:'Unpaid',unshipped:'Shipping',unreceived:'Receiving',
+    address:'Address',security:'Security',about:'About',contact:'Support',
+    checkinTitle:'Check-in',consecutiveDays:'Consecutive Days',checkinBtn:'Check In',checkedIn:'Done',
+    checkinOk:'Checked in! +10pts',alreadyDone:'Already checked in',
     sun:'Sun',mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',
-    loading:'Loading...',noMore:'No more items',loginFirst:'Please login first',
-    codeSent:'Code sent',loginSuccess:'Login successful',registerSuccess:'Registered'
+    added:'Added to cart',codeSent:'Code sent',loginOk:'Login OK',regOk:'Registered',loginFirst:'Please login'
   }
 };
 
-// ===== API Config =====
-const API_BASE = 'https://rolex.7s.com/store';
-const API_HEADERS = { 'x-publishable-api-key': 'pk_344342d6aaf4', 'Content-Type': 'application/json' };
-const REGION_ID = 'reg_01KS6M12N8HQK';
+// ===== API =====
+const API = 'https://rolex.7s.com/store';
+const HDRS = { 'x-publishable-api-key': 'pk_344342d6aaf4' };
+const RGN = 'reg_01KS6M12N8HQK';
 
-// ===== Mock Data (fallback) =====
-const MOCK_BANNERS = [
-  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+SUBMARINER', title: 'Submariner' },
-  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+DAYTONA', title: 'Daytona' },
-  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+DATEJUST', title: 'Datejust' }
+// ===== Mock =====
+const BANNERS = [
+  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+SUBMARINER' },
+  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+DAYTONA' },
+  { img: 'https://placehold.co/480x220/1a1b1e/c9a84c?text=ROLEX+DATEJUST' }
 ];
-const MOCK_PRODUCTS = Array.from({length:8}, (_, i) => ({
-  id: 'mock-'+(i+1),
-  title: ['Submariner Date','Cosmograph Daytona','Datejust 41','GMT-Master II','Day-Date 40','Explorer II','Sky-Dweller','Yacht-Master 42'][i],
-  thumbnail: `https://placehold.co/300x300/1a1b1e/c9a84c?text=ROLEX+${i+1}`,
-  description: '经典劳力士腕表，精钢蚝式表壳，自动上链机芯。Classic Rolex watch with Oystersteel case and automatic movement.',
-  variants: [{ prices: [{ amount: [9880000,15280000,8560000,12980000,28860000,10280000,19560000,13880000][i], currency_code:'cny' }] }]
+const MOCK = Array.from({length:8}, (_,i) => ({
+  id:'m'+(i+1),
+  title:['Submariner Date 41mm','Cosmograph Daytona','Datejust 41','GMT-Master II','Day-Date 40','Explorer II','Sky-Dweller','Yacht-Master 42'][i],
+  thumbnail:`https://placehold.co/300x300/1a1b1e/c9a84c?text=ROLEX+${['SUB','DAY','DJ','GMT','DD','EXP','SKY','YM'][i]}`,
+  description:'经典劳力士腕表，精钢蚝式表壳，自动上链机芯。',
+  variants:[{prices:[{amount:[9880000,15280000,8560000,12980000,28860000,10280000,19560000,13880000][i],currency_code:'cny'}]}]
 }));
 
-// ===== Components =====
-// --- Home ---
+function fmtPrice(p) {
+  try {
+    const v = p.variants;
+    if (v && v[0]) {
+      if (v[0].prices && v[0].prices[0]) return (v[0].prices[0].amount / 100).toLocaleString('en');
+      if (v[0].calculated_price && v[0].calculated_price.calculated_amount)
+        return (v[0].calculated_price.calculated_amount / 100).toLocaleString('en');
+    }
+  } catch(e) {}
+  return '0';
+}
+
+// ===== Toast =====
+function toast(msg) {
+  const d = document.createElement('div');
+  d.textContent = msg;
+  Object.assign(d.style, {position:'fixed',top:'40%',left:'50%',transform:'translateX(-50%)',background:'rgba(0,0,0,.85)',color:'#fff',padding:'10px 24px',borderRadius:'8px',fontSize:'14px',zIndex:'9999',transition:'opacity .3s'});
+  document.body.appendChild(d);
+  setTimeout(() => { d.style.opacity = '0'; setTimeout(() => d.remove(), 300); }, 2000);
+}
+
+// ===== Pages =====
 const HomePage = defineComponent({
-  template: `
-  <div>
-    <div class="search-bar">
-      <el-input v-model="searchQuery" :placeholder="t('search')" prefix-icon="Search" clearable @keyup.enter="filterProducts" @clear="filterProducts" />
-    </div>
-    <div class="banner-section">
-      <el-carousel height="200px" :interval="4000" class="banner-carousel" indicator-position="outside">
-        <el-carousel-item v-for="(b,i) in banners" :key="i">
-          <img :src="b.img" :alt="b.title" style="width:100%;height:100%;object-fit:cover;border-radius:8px">
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    <div class="quick-actions">
-      <div class="quick-action-item" v-for="a in quickActions" :key="a.key" @click="handleQuickAction(a.key)">
-        <div class="quick-action-icon">{{ a.icon }}</div>
-        <span class="quick-action-label">{{ t(a.key) }}</span>
-      </div>
-    </div>
-    <div class="section-title"><span class="gold-bar"></span>{{ t('hotProducts') }}</div>
-    <div v-if="loading" style="padding:0 16px">
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-        <div v-for="i in 4" :key="i" class="skeleton-box" style="aspect-ratio:.75"></div>
-      </div>
-    </div>
-    <div v-else class="product-grid">
-      <div v-for="p in displayProducts" :key="p.id" class="product-card" @click="$root.openDetail(p)">
-        <div class="thumb">
-          <img :src="p.thumbnail || 'https://placehold.co/300x300/1a1b1e/c9a84c?text=ROLEX'" :alt="p.title" loading="lazy">
-          <button class="fav-btn" :class="{faved: isFav(p.id)}" @click.stop="toggleFav(p.id)">{{ isFav(p.id) ? '★' : '☆' }}</button>
-        </div>
-        <div class="info">
-          <div class="name">{{ p.title }}</div>
-          <div class="price">¥{{ $root.formatPrice(p) }} <small>CNY</small></div>
-        </div>
-      </div>
-    </div>
-    <div class="load-more">
-      <el-button v-if="hasMore" :loading="loadingMore" @click="loadMoreProducts">{{ t('loadMore') }}</el-button>
-      <span v-else style="color:var(--text-sub);font-size:13px">{{ t('noMore') }}</span>
-    </div>
-  </div>`,
+  name: 'HomePage',
   setup() {
-    const root = Vue.getCurrentInstance().appContext.app.config.globalProperties;
-    const searchQuery = ref('');
+    const t = inject('t');
+    const openDetail = inject('openDetail');
+    const router = useRouter();
+    const search = ref('');
     const products = ref([]);
     const loading = ref(true);
     const loadingMore = ref(false);
     const offset = ref(0);
     const hasMore = ref(true);
     const favs = ref(JSON.parse(localStorage.getItem('rolex_favs') || '[]'));
-    const banners = ref(MOCK_BANNERS);
-    const quickActions = [
-      {key:'favorites',icon:'⭐'},{key:'orders',icon:'📋'},{key:'checkin',icon:'📅'},
-      {key:'service',icon:'🛠'},{key:'points',icon:'💰'},{key:'vipCenter',icon:'👑'}
-    ];
+    const bannerIdx = ref(0);
+    let bannerTimer = null;
 
-    const displayProducts = computed(() => {
-      if (!searchQuery.value) return products.value;
-      const q = searchQuery.value.toLowerCase();
+    const displayed = computed(() => {
+      if (!search.value) return products.value;
+      const q = search.value.toLowerCase();
       return products.value.filter(p => p.title.toLowerCase().includes(q));
     });
 
-    async function fetchProducts(append = false) {
+    async function fetchProducts(append) {
       if (append) loadingMore.value = true; else loading.value = true;
       try {
-        const res = await fetch(`${API_BASE}/products?limit=10&offset=${offset.value}&region_id=${REGION_ID}`, { headers: API_HEADERS });
-        if (!res.ok) throw new Error('API error');
-        const data = await res.json();
-        const items = data.products || [];
-        if (append) {
-          products.value = [...products.value, ...items];
-        } else {
-          products.value = items;
-        }
+        const r = await fetch(`${API}/products?limit=10&offset=${offset.value}&region_id=${RGN}`, { headers: HDRS });
+        if (!r.ok) throw new Error('err');
+        const d = await r.json();
+        const items = d.products || [];
+        products.value = append ? [...products.value, ...items] : items;
         hasMore.value = items.length >= 10;
         offset.value += items.length;
-      } catch (e) {
-        console.warn('Using mock data:', e);
-        if (!append) products.value = MOCK_PRODUCTS;
+      } catch(e) {
+        if (!append) products.value = MOCK;
         hasMore.value = false;
-      } finally {
-        loading.value = false;
-        loadingMore.value = false;
-      }
+      } finally { loading.value = false; loadingMore.value = false; }
     }
 
-    function loadMoreProducts() { fetchProducts(true); }
-    function filterProducts() {}
     function isFav(id) { return favs.value.includes(id); }
     function toggleFav(id) {
-      const idx = favs.value.indexOf(id);
-      if (idx > -1) favs.value.splice(idx,1); else favs.value.push(id);
+      const i = favs.value.indexOf(id);
+      if (i > -1) favs.value.splice(i,1); else favs.value.push(id);
       localStorage.setItem('rolex_favs', JSON.stringify(favs.value));
     }
-    function handleQuickAction(key) {
-      const router = useRouter();
-      if (key === 'checkin') router.push('/checkin');
-      else if (key === 'vipCenter') router.push('/vip');
-      else if (key === 'orders' || key === 'favorites') router.push('/user');
+    function goQuick(k) {
+      if (k === 'checkin') router.push('/checkin');
+      else if (k === 'vipCenter') router.push('/vip');
+      else router.push('/user');
     }
-    function t(k) { return root.t(k); }
+    function nextBanner() { bannerIdx.value = (bannerIdx.value + 1) % BANNERS.length; }
+    function prevBanner() { bannerIdx.value = (bannerIdx.value - 1 + BANNERS.length) % BANNERS.length; }
 
-    onMounted(() => fetchProducts());
+    onMounted(() => {
+      fetchProducts(false);
+      bannerTimer = setInterval(nextBanner, 4000);
+    });
 
-    return { searchQuery, products, displayProducts, loading, loadingMore, hasMore, banners, quickActions, offset, favs, loadMoreProducts, filterProducts, isFav, toggleFav, handleQuickAction, t };
-  }
-});
-
-// --- Recycle ---
-const RecyclePage = defineComponent({
-  template: `
-  <div>
-    <div class="page-top-title">{{ t('recycleTitle') }}</div>
+    return { t, search, displayed, loading, loadingMore, hasMore, favs, bannerIdx, BANNERS,
+             fetchProducts, isFav, toggleFav, goQuick, openDetail, fmtPrice, nextBanner, prevBanner };
+  },
+  template: `<div>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="si">🔍</span>
+        <input v-model="search" :placeholder="t('search')">
+      </div>
+    </div>
     <div class="banner-section">
-      <el-carousel height="180px" :interval="5000" class="banner-carousel">
-        <el-carousel-item v-for="(b,i) in banners" :key="i">
-          <img :src="b.img" :alt="'banner'+i" style="width:100%;height:100%;object-fit:cover;border-radius:8px">
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    <div class="recycle-cats">
-      <div class="recycle-cat-item" v-for="c in cats" :key="c.key">
-        <div class="left"><span class="emoji">{{ c.emoji }}</span><span>{{ t(c.key) }}</span></div>
-        <span class="arrow">›</span>
-      </div>
-    </div>
-    <div class="estimate-btn">
-      <el-button type="primary" size="large">{{ t('freeEstimate') }}</el-button>
-    </div>
-    <div class="section-title"><span class="gold-bar"></span>{{ t('featureServices') }}</div>
-    <div class="service-features">
-      <div class="service-feature" v-for="s in services" :key="s.key">
-        <div class="icon">{{ s.icon }}</div>
-        <div class="label">{{ t(s.key) }}</div>
-        <div class="sub">{{ t(s.key + 'Desc') }}</div>
-      </div>
-    </div>
-    <div class="recycle-flow">
-      <div class="section-title" style="padding:0;margin-bottom:14px"><span class="gold-bar"></span>{{ t('recycleFlow') }}</div>
-      <div class="flow-steps">
-        <div class="flow-step" v-for="(s,i) in steps" :key="i">
-          <div class="num">{{ i+1 }}</div>
-          <div class="step-info">
-            <div class="step-title">{{ t(s.key) }}</div>
-            <div class="step-desc">{{ t(s.key + 'd') }}</div>
-          </div>
+      <div class="banner-wrap">
+        <div class="banner-track" :style="{transform:'translateX(-'+bannerIdx*100+'%)'}">
+          <div class="banner-slide" v-for="(b,i) in BANNERS" :key="i"><img :src="b.img"></div>
         </div>
       </div>
+      <div class="banner-dots">
+        <div v-for="(b,i) in BANNERS" :key="i" class="banner-dot" :class="{active:bannerIdx===i}" @click="bannerIdx=i"></div>
+      </div>
     </div>
-  </div>`,
-  setup() {
-    const root = Vue.getCurrentInstance().appContext.app.config.globalProperties;
-    function t(k) { return root.t(k); }
-    const banners = MOCK_BANNERS;
-    const cats = [{key:'watchRecycle',emoji:'⌚'},{key:'bagRecycle',emoji:'👜'},{key:'jewelryRecycle',emoji:'💍'}];
-    const services = [{key:'freeDiagnose',icon:'🔍'},{key:'cashPayment',icon:'💵'},{key:'proTeam',icon:'👨‍💼'},{key:'privacyProtect',icon:'🔒'}];
-    const steps = [{key:'step1'},{key:'step2'},{key:'step3'},{key:'step4'}];
-    return { banners, cats, services, steps, t };
-  }
+    <div class="quick-actions">
+      <div class="qa-item" v-for="a in [{k:'favorites',i:'⭐'},{k:'orders',i:'📋'},{k:'checkin',i:'📅'},{k:'service',i:'🛠'},{k:'points',i:'💰'},{k:'vipCenter',i:'👑'}]" :key="a.k" @click="goQuick(a.k)">
+        <div class="qa-icon">{{a.i}}</div>
+        <span class="qa-label">{{t(a.k)}}</span>
+      </div>
+    </div>
+    <div class="sec-title"><span class="bar"></span>{{t('hotProducts')}}</div>
+    <div v-if="loading" style="padding:0 16px"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"><div v-for="i in 4" :key="i" class="skel" style="aspect-ratio:.75"></div></div></div>
+    <div v-else class="product-grid">
+      <div v-for="p in displayed" :key="p.id" class="p-card" @click="openDetail(p)">
+        <div class="thumb">
+          <img :src="p.thumbnail||'https://placehold.co/300x300/1a1b1e/c9a84c?text=R'" :alt="p.title" loading="lazy">
+          <button class="fav" :class="{on:isFav(p.id)}" @click.stop="toggleFav(p.id)">{{isFav(p.id)?'★':'☆'}}</button>
+        </div>
+        <div class="info"><div class="name">{{p.title}}</div><div class="price">¥{{fmtPrice(p)}} <small>CNY</small></div></div>
+      </div>
+    </div>
+    <div class="load-more">
+      <button v-if="hasMore" @click="fetchProducts(true)" :disabled="loadingMore" style="padding:10px 40px;border-radius:20px;background:var(--card);color:#fff;border:1px solid var(--bd);font-size:14px">{{loadingMore?'...':t('loadMore')}}</button>
+      <span v-else style="color:var(--t2);font-size:13px">{{t('noMore')}}</span>
+    </div>
+  </div>`
 });
 
-// --- VIP ---
+const RecyclePage = defineComponent({
+  name: 'RecyclePage',
+  setup() { const t = inject('t'); return { t }; },
+  template: `<div>
+    <div class="page-title">{{t('recycleTitle')}}</div>
+    <div class="banner-section"><div class="banner-wrap" style="height:160px"><img src="https://placehold.co/480x160/1a1b1e/c9a84c?text=LUXURY+RECYCLING" style="width:100%;height:100%;object-fit:cover"></div></div>
+    <div v-for="c in [{k:'watchRecycle',e:'⌚'},{k:'bagRecycle',e:'👜'},{k:'jewelryRecycle',e:'💍'}]" :key="c.k" class="rc-item">
+      <div class="rc-left"><span class="rc-emoji">{{c.e}}</span><span>{{t(c.k)}}</span></div><span class="rc-arrow">›</span>
+    </div>
+    <div class="est-btn"><button>{{t('freeEstimate')}}</button></div>
+    <div class="sec-title"><span class="bar"></span>{{t('featureServices')}}</div>
+    <div class="sf-grid">
+      <div v-for="s in [{k:'freeDiagnose',i:'🔍'},{k:'cashPayment',i:'💵'},{k:'proTeam',i:'👨‍💼'},{k:'privacyProtect',i:'🔒'}]" :key="s.k" class="sf-item">
+        <div class="sf-icon">{{s.i}}</div><div class="sf-label">{{t(s.k)}}</div><div class="sf-sub">{{t(s.k+'D')}}</div>
+      </div>
+    </div>
+    <div class="sec-title" style="padding-left:16px"><span class="bar"></span>{{t('recycleFlow')}}</div>
+    <div class="flow-steps">
+      <div v-for="(s,i) in ['s1','s2','s3','s4']" :key="s" class="flow-step">
+        <div class="flow-num">{{i+1}}</div>
+        <div><div class="step-t">{{t(s)}}</div><div class="step-d">{{t(s+'d')}}</div></div>
+      </div>
+    </div>
+  </div>`
+});
+
 const VipPage = defineComponent({
-  template: `
-  <div>
-    <div class="page-top-title">VIP {{ t('vipCenter') }}</div>
+  name: 'VipPage',
+  setup() { const t = inject('t'); return { t }; },
+  template: `<div>
+    <div class="page-title">VIP</div>
     <div class="vip-card">
-      <div class="level"><span class="crown">👑</span>{{ t('vipLevel') }}</div>
+      <div class="vip-level"><span>👑</span>{{t('vipLevel')}}</div>
       <div class="vip-stats">
-        <div class="vip-stat"><div class="val">2,680</div><div class="lbl">{{ t('vipPoints') }}</div></div>
-        <div class="vip-stat"><div class="val">1,320</div><div class="lbl">{{ t('growth') }}</div></div>
+        <div class="vs"><div class="vv">2,680</div><div class="vl">{{t('vipPoints')}}</div></div>
+        <div class="vs"><div class="vv">1,320</div><div class="vl">{{t('growth')}}</div></div>
       </div>
-      <div class="vip-progress"><el-progress :percentage="66" :stroke-width="10" :show-text="true" /></div>
-      <div class="vip-upgrade-text">{{ t('nextLevel') }}</div>
+      <div class="vip-prog"><div class="vip-prog-bar" style="width:66%"></div></div>
+      <div class="vip-prog-text">{{t('nextLevel')}}</div>
     </div>
-    <div class="vip-benefits">
-      <div class="section-title" style="padding:0;margin-bottom:14px"><span class="gold-bar"></span>{{ t('vipBenefits') }}</div>
-      <div class="vip-benefit-grid">
-        <div class="vip-benefit" v-for="b in benefits" :key="b.key">
-          <div class="b-icon">{{ b.icon }}</div>
-          <div class="b-name">{{ t(b.key) }}</div>
-        </div>
+    <div class="sec-title"><span class="bar"></span>{{t('vipBenefits')}}</div>
+    <div class="vb-grid">
+      <div v-for="b in [{k:'b1',i:'🏷️'},{k:'b2',i:'🎁'},{k:'b3',i:'⚡'},{k:'b4',i:'📦'},{k:'b5',i:'💬'},{k:'b6',i:'💎'}]" :key="b.k" class="vb-item">
+        <div class="vb-icon">{{b.i}}</div><div class="vb-name">{{t(b.k)}}</div>
       </div>
     </div>
-    <div class="invite-section">
-      <div class="section-title" style="padding:0;margin-bottom:6px"><span class="gold-bar"></span>{{ t('inviteFriends') }}</div>
-      <p style="font-size:13px;color:var(--text-sub);margin-bottom:14px;padding:0">{{ t('inviteDesc') }}</p>
-      <el-button type="primary" size="large">{{ t('inviteFriends') }}</el-button>
+    <div class="invite-sec">
+      <div class="sec-title" style="padding:0"><span class="bar"></span>{{t('inviteFriends')}}</div>
+      <p style="font-size:13px;color:var(--t2);margin-top:6px">{{t('inviteDesc')}}</p>
+      <button>{{t('inviteFriends')}}</button>
     </div>
-  </div>`,
-  setup() {
-    const root = Vue.getCurrentInstance().appContext.app.config.globalProperties;
-    function t(k) { return root.t(k); }
-    const benefits = [
-      {key:'b1',icon:'🏷️'},{key:'b2',icon:'🎁'},{key:'b3',icon:'⚡'},
-      {key:'b4',icon:'📦'},{key:'b5',icon:'💬'},{key:'b6',icon:'💎'}
-    ];
-    return { benefits, t };
-  }
+  </div>`
 });
 
-// --- User ---
 const UserPage = defineComponent({
-  template: `
-  <div>
-    <div class="user-header">
-      <div class="avatar"><img src="https://placehold.co/64x64/1a1b1e/c9a84c?text=R" alt="avatar"></div>
-      <div class="info">
-        <div class="name">{{ isLoggedIn ? userName : 'Guest' }}</div>
-        <span class="badge" v-if="isLoggedIn">{{ t('vipLevel') }}</span>
-        <el-button v-else type="primary" size="small" style="margin-top:6px;border-radius:14px" @click="$root.loginVisible=true">{{ t('login') }}</el-button>
+  name: 'UserPage',
+  setup() {
+    const t = inject('t');
+    const showLogin = inject('showLogin');
+    const isLogged = inject('isLogged');
+    const userName = inject('userName');
+    return { t, showLogin, isLogged, userName };
+  },
+  template: `<div>
+    <div class="u-header">
+      <div class="u-avatar"><img src="https://placehold.co/64x64/1a1b1e/c9a84c?text=R"></div>
+      <div>
+        <div class="u-name">{{isLogged?userName:'Guest'}}</div>
+        <span class="u-badge" v-if="isLogged">{{t('vipLevel')}}</span>
+        <button v-else class="u-login-btn" @click="showLogin">{{t('login')}}</button>
       </div>
     </div>
-    <div class="info-card" v-if="isLoggedIn">
-      <div class="row"><span class="label">{{ t('userId') }}</span><span>RX88266</span></div>
-      <div class="row"><span class="label">{{ t('realName') }}</span><span>***</span></div>
-      <div class="row"><span class="label">{{ t('mobile') }}</span><span>138****8888</span></div>
+    <div class="info-card" v-if="isLogged">
+      <div class="info-row"><span class="lbl">{{t('userId')}}</span><span>RX88266</span></div>
+      <div class="info-row"><span class="lbl">{{t('realName')}}</span><span>***</span></div>
+      <div class="info-row"><span class="lbl">{{t('mobile')}}</span><span>138****8888</span></div>
     </div>
-    <div class="asset-card" v-if="isLoggedIn">
+    <div class="asset-card" v-if="isLogged">
       <div class="asset-grid">
-        <div class="asset-item"><div class="val">¥0</div><div class="lbl">{{ t('balance') }}</div></div>
-        <div class="asset-item"><div class="val">2,680</div><div class="lbl">{{ t('vipPoints') }}</div></div>
-        <div class="asset-item"><div class="val">3</div><div class="lbl">{{ t('coupon') }}</div></div>
+        <div><div class="asset-val">¥0</div><div class="asset-lbl">{{t('balance')}}</div></div>
+        <div><div class="asset-val">2,680</div><div class="asset-lbl">{{t('vipPoints')}}</div></div>
+        <div><div class="asset-val">3</div><div class="asset-lbl">{{t('coupon')}}</div></div>
       </div>
-      <el-button type="primary" style="width:100%;border-radius:var(--radius)" size="small">{{ t('withdraw') }}</el-button>
+      <button class="asset-btn">{{t('withdraw')}}</button>
     </div>
-    <div class="order-tabs" v-if="isLoggedIn">
-      <div class="order-tab" v-for="o in orderTabs" :key="o.key">
-        <div class="icon">{{ o.icon }}</div>
-        <div class="text">{{ t(o.key) }}</div>
+    <div class="order-tabs" v-if="isLogged">
+      <div v-for="o in [{k:'allOrders',i:'📋'},{k:'unpaid',i:'💳'},{k:'unshipped',i:'📦'},{k:'unreceived',i:'🚚'}]" :key="o.k" class="order-tab">
+        <div class="oi">{{o.i}}</div><div class="ot">{{t(o.k)}}</div>
       </div>
     </div>
     <div class="func-list">
-      <div class="func-item" v-for="f in funcItems" :key="f.key" @click="f.action && f.action()">
-        <div class="left"><span class="fi">{{ f.icon }}</span><span>{{ t(f.key) }}</span></div>
-        <span class="arrow">›</span>
+      <div v-for="f in [{k:'address',i:'📍'},{k:'security',i:'🔐'},{k:'about',i:'ℹ️'},{k:'contact',i:'☎️'}]" :key="f.k" class="func-item">
+        <div class="func-left"><span class="fi">{{f.i}}</span><span>{{t(f.k)}}</span></div><span class="func-arrow">›</span>
       </div>
     </div>
-  </div>`,
-  setup() {
-    const root = Vue.getCurrentInstance().appContext.app.config.globalProperties;
-    function t(k) { return root.t(k); }
-    const isLoggedIn = computed(() => root.isLoggedIn);
-    const userName = computed(() => root.userName);
-    const orderTabs = [{key:'allOrders',icon:'📋'},{key:'unpaid',icon:'💳'},{key:'unshipped',icon:'📦'},{key:'unreceived',icon:'🚚'}];
-    const funcItems = [
-      {key:'address',icon:'📍'},{key:'security',icon:'🔐'},{key:'about',icon:'ℹ️'},
-      {key:'contact',icon:'☎️'}
-    ];
-    return { isLoggedIn, userName, orderTabs, funcItems, t };
-  }
+  </div>`
 });
 
-// --- Checkin ---
 const CheckinPage = defineComponent({
-  template: `
-  <div>
-    <div class="page-top-title">{{ t('checkinTitle') }}</div>
-    <div class="checkin-header">
-      <div class="streak">{{ streak }}</div>
-      <div class="streak-label">{{ t('consecutiveDays') }}</div>
-    </div>
-    <div class="calendar-grid">
-      <div class="calendar-day-header" v-for="d in weekHeaders" :key="d">{{ d }}</div>
-      <div v-for="(d,i) in calendarDays" :key="i" class="calendar-day"
-        :class="{empty: d===0, checked: d>0 && isChecked(d), today: d===todayDate, future: d>todayDate}">
-        {{ d > 0 ? d : '' }}
-      </div>
-    </div>
-    <div class="checkin-btn-wrap">
-      <el-button type="primary" :disabled="todayChecked" @click="doCheckin">
-        {{ todayChecked ? t('checkedIn') : t('checkinBtn') }}
-      </el-button>
-    </div>
-  </div>`,
+  name: 'CheckinPage',
   setup() {
-    const root = Vue.getCurrentInstance().appContext.app.config.globalProperties;
-    function t(k) { return root.t(k); }
+    const t = inject('t');
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const todayDate = now.getDate();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay();
-    const calendarDays = ref([]);
-
-    // Build calendar
+    const y = now.getFullYear(), m = now.getMonth(), td = now.getDate();
+    const dim = new Date(y, m+1, 0).getDate();
+    const fd = new Date(y, m, 1).getDay();
     const days = [];
-    for (let i = 0; i < firstDay; i++) days.push(0);
-    for (let i = 1; i <= daysInMonth; i++) days.push(i);
-    calendarDays.value = days;
-
-    const checkedDays = ref(JSON.parse(localStorage.getItem('rolex_checkin_' + year + '_' + month) || '[]'));
-    const todayChecked = computed(() => checkedDays.value.includes(todayDate));
-    const streak = computed(() => {
-      let count = 0;
-      for (let d = todayDate; d >= 1; d--) {
-        if (checkedDays.value.includes(d)) count++;
-        else break;
-      }
-      return count;
-    });
-
-    const weekHeaders = computed(() => [t('sun'),t('mon'),t('tue'),t('wed'),t('thu'),t('fri'),t('sat')]);
-
-    function isChecked(d) { return checkedDays.value.includes(d); }
-    function doCheckin() {
-      if (todayChecked.value) { ElMessage.info(t('alreadyCheckedIn')); return; }
-      checkedDays.value.push(todayDate);
-      localStorage.setItem('rolex_checkin_' + year + '_' + month, JSON.stringify(checkedDays.value));
-      ElMessage.success(t('checkinSuccess'));
+    for (let i = 0; i < fd; i++) days.push(0);
+    for (let i = 1; i <= dim; i++) days.push(i);
+    const calDays = ref(days);
+    const checked = ref(JSON.parse(localStorage.getItem('ck_'+y+'_'+m) || '[]'));
+    const todayDone = computed(() => checked.value.includes(td));
+    const streak = computed(() => { let c=0; for(let d=td;d>=1;d--){if(checked.value.includes(d))c++;else break;} return c; });
+    const hdrs = computed(() => [t('sun'),t('mon'),t('tue'),t('wed'),t('thu'),t('fri'),t('sat')]);
+    function isC(d) { return checked.value.includes(d); }
+    function doCheck() {
+      if (todayDone.value) { toast(t('alreadyDone')); return; }
+      checked.value.push(td);
+      localStorage.setItem('ck_'+y+'_'+m, JSON.stringify(checked.value));
+      toast(t('checkinOk'));
     }
-
-    return { calendarDays, todayDate, todayChecked, streak, weekHeaders, isChecked, doCheckin, t };
-  }
+    return { t, calDays, td, todayDone, streak, hdrs, isC, doCheck };
+  },
+  template: `<div>
+    <div class="page-title">{{t('checkinTitle')}}</div>
+    <div class="ck-header"><div class="ck-num">{{streak}}</div><div class="ck-lbl">{{t('consecutiveDays')}}</div></div>
+    <div class="cal-grid">
+      <div class="cal-hdr" v-for="h in hdrs" :key="h">{{h}}</div>
+      <div v-for="(d,i) in calDays" :key="i" class="cal-day" :class="{empty:d===0,checked:d>0&&isC(d),today:d===td,future:d>td}">{{d>0?d:''}}</div>
+    </div>
+    <div class="ck-btn"><button :disabled="todayDone" @click="doCheck">{{todayDone?t('checkedIn'):t('checkinBtn')}}</button></div>
+  </div>`
 });
 
 // ===== Router =====
@@ -763,107 +555,155 @@ const router = createRouter({ history: createWebHashHistory(), routes });
 // ===== App =====
 const app = createApp({
   setup() {
-    const lang = ref(localStorage.getItem('rolex_lang') || 'zh');
-    const currentTab = computed(() => {
-      const r = useRoute();
-      return r.path;
-    });
-    const tabs = [
-      { path: '/home', icon: '🏠', label: 'home' },
-      { path: '/recycle', icon: '♻️', label: 'recycle' },
-      { path: '/vip', icon: '👑', label: 'vip' },
-      { path: '/user', icon: '👤', label: 'user' }
-    ];
+    const lang = ref(localStorage.getItem('rlang') || 'zh');
+    const route = useRoute();
+    const curTab = computed(() => route.path);
+    const tabs = [{p:'/home',i:'🏠',l:'home'},{p:'/recycle',i:'♻️',l:'recycle'},{p:'/vip',i:'👑',l:'vip'},{p:'/user',i:'👤',l:'user'}];
+
+    function t(k) { return msgs[lang.value][k] || k; }
+    function toggleLang() { lang.value = lang.value==='zh'?'en':'zh'; localStorage.setItem('rlang',lang.value); }
 
     // Cart
-    const cart = ref(JSON.parse(localStorage.getItem('rolex_cart') || '[]'));
-    const cartVisible = ref(false);
-    const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + (parseFloat(item.displayPrice.replace(/,/g,'')) * item.qty), 0).toLocaleString('en'));
-
-    function saveCart() { localStorage.setItem('rolex_cart', JSON.stringify(cart.value)); }
-    function addToCart(product) {
-      const price = formatPrice(product);
-      const existing = cart.value.find(c => c.id === product.id);
-      if (existing) { existing.qty++; }
-      else { cart.value.push({ id: product.id, title: product.title, thumbnail: product.thumbnail, displayPrice: price, qty: 1 }); }
-      saveCart();
-      ElMessage.success(lang.value === 'zh' ? '已加入购物车' : 'Added to cart');
+    const cart = ref(JSON.parse(localStorage.getItem('rcart') || '[]'));
+    const cartOpen = ref(false);
+    const cartTotal = computed(() => cart.value.reduce((s,c) => s + parseFloat(String(c.dp).replace(/,/g,''))*c.qty, 0).toLocaleString('en'));
+    function saveCart() { localStorage.setItem('rcart', JSON.stringify(cart.value)); }
+    function addToCart(p) {
+      const dp = fmtPrice(p);
+      const ex = cart.value.find(c => c.id === p.id);
+      if (ex) ex.qty++; else cart.value.push({id:p.id,title:p.title,thumb:p.thumbnail,dp,qty:1});
+      saveCart(); toast(t('added'));
     }
-    function changeQty(idx, delta) {
-      cart.value[idx].qty += delta;
-      if (cart.value[idx].qty <= 0) cart.value.splice(idx, 1);
-      saveCart();
-    }
-    function removeFromCart(idx) { cart.value.splice(idx, 1); saveCart(); }
+    function chgQty(i,d) { cart.value[i].qty+=d; if(cart.value[i].qty<=0) cart.value.splice(i,1); saveCart(); }
+    function rmCart(i) { cart.value.splice(i,1); saveCart(); }
 
     // Detail
-    const detailVisible = ref(false);
-    const detailProduct = ref(null);
-    const selectedSize = ref('41mm');
-    const sizes = ['36mm', '39mm', '41mm', '44mm'];
-
-    function openDetail(p) { detailProduct.value = p; detailVisible.value = true; selectedSize.value = '41mm'; }
-
-    function formatPrice(product) {
-      try {
-        const v = product.variants;
-        if (v && v.length > 0 && v[0].prices && v[0].prices.length > 0) {
-          return (v[0].prices[0].amount / 100).toLocaleString('en');
-        }
-        // Try calculated_price (Medusa v2)
-        if (v && v.length > 0 && v[0].calculated_price) {
-          const cp = v[0].calculated_price;
-          if (cp.calculated_amount) return (cp.calculated_amount / 100).toLocaleString('en');
-        }
-      } catch(e) {}
-      return '0';
-    }
+    const detailOpen = ref(false);
+    const detailP = ref(null);
+    const selSize = ref('41mm');
+    const sizes = ['36mm','39mm','41mm','44mm'];
+    function openDetail(p) { detailP.value=p; detailOpen.value=true; selSize.value='41mm'; }
 
     // Login
-    const loginVisible = ref(false);
+    const loginOpen = ref(false);
     const loginMode = ref('login');
-    const loginForm = reactive({ phone: '', password: '', code: '' });
+    const lf = reactive({phone:'',pwd:'',code:''});
     const codeCd = ref(0);
-    const isLoggedIn = ref(!!localStorage.getItem('rolex_user'));
-    const userName = ref(localStorage.getItem('rolex_user') || '');
-
+    const isLogged = ref(!!localStorage.getItem('ruser'));
+    const userName = ref(localStorage.getItem('ruser')||'');
+    function showLogin() { loginOpen.value = true; loginMode.value = 'login'; }
     function sendCode() {
-      if (!loginForm.phone) { ElMessage.warning(t('phonePh')); return; }
-      codeCd.value = 60;
-      const timer = setInterval(() => { codeCd.value--; if (codeCd.value <= 0) clearInterval(timer); }, 1000);
-      ElMessage.success(t('codeSent'));
+      if(!lf.phone){toast(t('phonePh'));return;}
+      codeCd.value=60;
+      const tm=setInterval(()=>{codeCd.value--;if(codeCd.value<=0)clearInterval(tm);},1000);
+      toast(t('codeSent'));
     }
-    function handleLogin() {
-      if (!loginForm.phone) { ElMessage.warning(t('phonePh')); return; }
-      if (loginMode.value === 'forgot') { ElMessage.success(t('resetPwd')); loginVisible.value = false; return; }
-      const uname = loginForm.phone;
-      localStorage.setItem('rolex_user', uname);
-      isLoggedIn.value = true;
-      userName.value = uname;
-      loginVisible.value = false;
-      ElMessage.success(loginMode.value === 'login' ? t('loginSuccess') : t('registerSuccess'));
+    function doLogin() {
+      if(!lf.phone){toast(t('phonePh'));return;}
+      if(loginMode.value==='forgot'){toast(t('resetPwd'));loginOpen.value=false;return;}
+      localStorage.setItem('ruser',lf.phone);
+      isLogged.value=true; userName.value=lf.phone; loginOpen.value=false;
+      toast(loginMode.value==='login'?t('loginOk'):t('regOk'));
     }
 
-    // i18n
-    function t(key) { return messages[lang.value][key] || key; }
-    function toggleLang() {
-      lang.value = lang.value === 'zh' ? 'en' : 'zh';
-      localStorage.setItem('rolex_lang', lang.value);
-    }
+    // Provide
+    provide('t', t);
+    provide('openDetail', openDetail);
+    provide('showLogin', showLogin);
+    provide('isLogged', isLogged);
+    provide('userName', userName);
 
-    return {
-      lang, currentTab, tabs, t, toggleLang,
-      cart, cartVisible, cartTotal, addToCart, changeQty, removeFromCart, saveCart,
-      detailVisible, detailProduct, selectedSize, sizes, openDetail, formatPrice,
-      loginVisible, loginMode, loginForm, codeCd, isLoggedIn, userName, sendCode, handleLogin,
-      ElMessage
-    };
-  }
+    return { lang,curTab,tabs,t,toggleLang,
+      cart,cartOpen,cartTotal,addToCart,chgQty,rmCart,saveCart,
+      detailOpen,detailP,selSize,sizes,openDetail,fmtPrice,
+      loginOpen,loginMode,lf,codeCd,isLogged,userName,showLogin,sendCode,doLogin };
+  },
+  template: `<div>
+    <button class="lang-toggle" @click="toggleLang">{{lang==='zh'?'EN':'中文'}}</button>
+
+    <router-view></router-view>
+
+    <!-- Tab Bar -->
+    <nav class="tab-bar">
+      <div v-for="tb in tabs" :key="tb.p" class="tab-item" :class="{active:curTab===tb.p}" @click="$router.push(tb.p)">
+        <span class="ti">{{tb.i}}</span><span>{{t(tb.l)}}</span>
+      </div>
+    </nav>
+
+    <!-- Detail -->
+    <div v-if="detailOpen" class="detail-overlay" @click.self="detailOpen=false">
+      <div class="detail-panel" v-if="detailP">
+        <button class="detail-close" @click="detailOpen=false">✕</button>
+        <div class="detail-img"><img :src="detailP.thumbnail||'https://placehold.co/400x400/1a1b1e/c9a84c?text=ROLEX'"></div>
+        <div class="detail-body">
+          <div class="dt">{{detailP.title}}</div>
+          <div class="dd">{{detailP.description||t('noDesc')}}</div>
+          <div class="dp">¥{{fmtPrice(detailP)}}</div>
+          <div class="size-opts">
+            <button v-for="s in sizes" :key="s" class="size-btn" :class="{on:selSize===s}" @click="selSize=s">{{s}}</button>
+          </div>
+          <div class="detail-btns">
+            <button class="btn-cart" @click="addToCart(detailP)">{{t('addCart')}}</button>
+            <button class="btn-buy" @click="addToCart(detailP);cartOpen=true;detailOpen=false">{{t('buyNow')}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart -->
+    <div v-if="cartOpen">
+      <div class="cart-overlay" @click="cartOpen=false"></div>
+      <div class="cart-panel">
+        <div class="cart-header"><h3>{{t('cart')}}</h3><button class="cart-close" @click="cartOpen=false">✕</button></div>
+        <div class="cart-body">
+          <div v-if="cart.length===0" class="cart-empty"><div class="ce-icon">🛒</div><div>{{t('cartEmpty')}}</div></div>
+          <div v-for="(c,i) in cart" :key="i" class="ci">
+            <div class="ci-img"><img :src="c.thumb||'https://placehold.co/80/1a1b1e/c9a84c?text=R'"></div>
+            <div class="ci-info">
+              <div class="ci-name">{{c.title}}</div>
+              <div class="ci-price">¥{{c.dp}}</div>
+              <div class="ci-acts">
+                <button @click="chgQty(i,-1)">−</button><span class="ci-qty">{{c.qty}}</span><button @click="chgQty(i,1)">+</button>
+                <span class="ci-del" @click="rmCart(i)">{{t('delete')}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="cart.length>0" class="cart-footer">
+          <div class="cart-total"><span>{{t('total')}}</span><span class="amt">¥{{cartTotal}}</span></div>
+          <button class="cart-checkout" @click="toast(t('orderSuccess'));cart=[];saveCart();cartOpen=false">{{t('checkout')}}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login -->
+    <div v-if="loginOpen" class="login-overlay" @click.self="loginOpen=false">
+      <div class="login-panel">
+        <div class="login-header">
+          <h3>{{loginMode==='login'?t('login'):loginMode==='register'?t('register'):t('forgotPwd')}}</h3>
+          <button class="login-close" @click="loginOpen=false">✕</button>
+        </div>
+        <div class="login-body">
+          <div class="form-group"><label>{{t('phone')}}</label><input v-model="lf.phone" :placeholder="t('phonePh')"></div>
+          <div class="form-group" v-if="loginMode!=='forgot'"><label>{{t('password')}}</label><input v-model="lf.pwd" type="password" :placeholder="t('pwdPh')"></div>
+          <div class="form-group"><label>{{t('smsCode')}}</label>
+            <div class="code-row"><input v-model="lf.code" :placeholder="t('codePh')">
+              <button class="code-btn" :disabled="codeCd>0" @click="sendCode">{{codeCd>0?codeCd+'s':t('getCode')}}</button>
+            </div>
+          </div>
+          <button class="login-submit" @click="doLogin">{{loginMode==='login'?t('login'):loginMode==='register'?t('register'):t('resetPwd')}}</button>
+          <div class="switch-link" v-if="loginMode==='login'">
+            {{t('noAccount')}}<a @click="loginMode='register'">{{t('register')}}</a>
+            <span style="margin:0 8px">|</span><a @click="loginMode='forgot'">{{t('forgotPwd')}}</a>
+          </div>
+          <div class="switch-link" v-else>{{t('hasAccount')}}<a @click="loginMode='login'">{{t('login')}}</a></div>
+        </div>
+      </div>
+    </div>
+  </div>`
 });
 
-app.use(createPinia());
 app.use(router);
-app.use(ElementPlus);
 app.mount('#app');
 </script>
 </body>
