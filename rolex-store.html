@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rolex Watch Home</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#fff;color:#0f172a;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;outline:none;font-family:inherit}
+ul{list-style:none}
+img{max-width:100%;display:block}
+.container{max-width:1280px;margin:0 auto;padding:0 1rem}
+
+/* ===== HEADER ===== */
+.main-header{position:fixed;top:0;left:0;right:0;z-index:100;background:#0f172a}
+.main-header-placeholder{height:110px}
+@media(max-width:767px){.main-header-placeholder{height:96px}}
+.nav-bar{border-bottom:1px solid rgba(255,255,255,.1)}
+.nav-bar .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.logo-icon1{width:40px;height:40px;object-fit:contain}
+.logo-text{display:flex;flex-direction:column}
+.logo-main{color:#fff;font-size:1.25rem;font-weight:700;letter-spacing:.05em}
+.logo-sub{color:#94a3b8;font-size:.625rem;letter-spacing:.15em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:2rem}
+@media(max-width:767px){.nav-links{display:none}}
+.nav-link{color:#94a3b8;font-size:.875rem;font-weight:500;transition:color .2s;padding:.5rem 0}
+.nav-link:hover,.nav-link.active{color:#fff}
+.user-actions{display:flex;align-items:center;gap:1rem}
+.login-btn{display:inline-flex;align-items:center;gap:.5rem;color:#fff;background:transparent;font-size:.875rem;font-weight:500;padding:.5rem 1rem;border:1px solid rgba(255,255,255,.2);border-radius:.25rem;transition:all .2s}
+.login-btn:hover{background:rgba(255,255,255,.1)}
+.login-btn svg{width:18px;height:18px}
+.mobile-menu-btn{display:none;background:transparent;color:#fff;padding:.25rem}
+@media(max-width:767px){.mobile-menu-btn{display:flex;align-items:center}}
+
+/* Announcement Bar */
+.announcement-bar{background:#0f172a;border-bottom:1px solid rgba(255,255,255,.05);padding:.5rem 0}
+.announcement-content{display:flex;align-items:center;justify-content:center;gap:.75rem;color:#94a3b8;font-size:.8rem}
+.announcement-content svg{width:16px;height:16px;color:#f59e0b;flex-shrink:0}
+.announcement-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== HERO CAROUSEL ===== */
+.hero-carousel-section{background:#0f172a;width:100%;position:relative;overflow:hidden}
+.hero-carousel-container{width:100%;position:relative}
+.hero-carousel-content{overflow:hidden}
+.hero-carousel-slides{display:flex;transition:transform .5s ease-in-out;will-change:transform}
+.hero-carousel-slide{flex:0 0 100%;width:100%;min-width:0;height:500px;position:relative}
+@media(min-width:768px){.hero-carousel-slide{height:600px}}
+.hero-carousel-slide-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.hero-carousel-slide-overlay{position:absolute;inset:0;background-color:rgba(0,0,0,.4);background-image:linear-gradient(transparent 0%,rgba(0,0,0,.2) 50%,rgba(0,0,0,.8) 100%)}
+.hero-carousel-slide-content{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;max-width:1280px;height:100%;margin:0 auto;padding:4rem 1rem 0;position:relative}
+.hero-carousel-slide-inner{display:flex;flex-direction:column;gap:1.5rem;max-width:42rem}
+.hero-carousel-badge-container{display:flex;align-items:center;gap:1rem}
+.hero-carousel-badge{color:#fff;text-transform:uppercase;letter-spacing:.05em;backdrop-filter:blur(4px);background-color:rgba(245,158,11,.9);border-radius:.125rem;padding:.25rem .75rem;font-size:.75rem;font-weight:700}
+.hero-carousel-divider{background-color:rgba(255,255,255,.4);width:5rem;height:1px}
+.hero-carousel-title{color:#fff;letter-spacing:-.025em;font-size:2.25rem;font-weight:700;line-height:1.1}
+@media(min-width:768px){.hero-carousel-title{font-size:3.75rem}}
+.hero-carousel-description{color:#e2e8f0;max-width:32rem;font-size:1.125rem;line-height:1.625}
+@media(min-width:768px){.hero-carousel-description{font-size:1.25rem}}
+.hero-carousel-button-container{padding-top:1rem}
+.hero-carousel-button{display:inline-flex;justify-content:center;align-items:center;gap:.5rem;white-space:nowrap;color:#0f172a;background:#fff;border:none;border-radius:0;height:2.5rem;padding:1.5rem 2rem;font-size:1rem;font-weight:500;transition:all .2s;cursor:pointer}
+.hero-carousel-button:hover{background:#f1f5f9}
+.hero-carousel-nav{display:none;justify-content:center;align-items:center;position:absolute;top:50%;transform:translateY(-50%);width:2.5rem;height:2.5rem;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;transition:all .2s;cursor:pointer}
+@media(min-width:768px){.hero-carousel-nav{display:flex}}
+.hero-carousel-nav:hover{background:rgba(255,255,255,.2)}
+.hero-carousel-nav-prev{left:1rem}
+.hero-carousel-nav-next{right:1rem}
+.hero-carousel-nav svg{width:20px;height:20px}
+
+/* ===== SERVICE CENTER ===== */
+.service-center-section{background:#fff;padding:3rem 0}
+.service-center-container{max-width:1280px;margin:0 auto;padding:0 1rem}
+.service-center-header{text-align:center;margin-bottom:2.5rem}
+.service-center-title{color:#0f172a;margin-bottom:.5rem;font-size:1.5rem;font-weight:700}
+.service-center-subtitle{color:#64748b;font-size:.875rem}
+.service-center-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.service-center-grid{grid-template-columns:repeat(3,1fr)}}
+.service-card{border:1px solid #f1f5f9;border-radius:.75rem;height:20rem;position:relative;overflow:hidden;transition:all .3s;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+.service-card:hover{box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
+.service-card-recovery,.service-card-vault{display:flex;flex-direction:column}
+.service-card-trade{text-align:center;background:#f8fafc;flex-direction:column;align-items:center;padding:2rem 1.5rem;display:flex;gap:.75rem}
+.service-card-bg{position:absolute;inset:0}
+.service-card-bg-vault{background-size:cover;background-position:center}
+.service-card-image{width:100%;height:100%;object-fit:cover}
+.service-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,rgba(0,0,0,.2) 100%)}
+.service-card-overlay-vault{background:linear-gradient(to top,rgba(15,23,42,.9) 0%,rgba(15,23,42,.4) 100%)}
+.service-card-content{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;padding:1.5rem}
+.service-card-info{margin-bottom:1rem}
+.service-card-info svg{width:24px;height:24px;color:#f59e0b;margin-bottom:.5rem}
+.service-card-title{color:#fff;font-size:1.25rem;font-weight:600;margin-bottom:.25rem}
+.service-card-title-dark{color:#0f172a}
+.service-card-description{color:#cbd5e1;font-size:.875rem}
+.service-card-description-dark{color:#64748b}
+.service-card-icon-wrapper{width:100%;height:8rem;border-radius:.5rem;overflow:hidden;margin-bottom:.5rem}
+.service-card-icon{width:100%;height:100%;object-fit:cover}
+.service-card-button{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:.375rem;font-size:.875rem;font-weight:500;transition:all .2s;cursor:pointer}
+.service-card-button svg{width:16px;height:16px}
+.service-card-button-amber{background:#f59e0b;color:#fff;border:none}
+.service-card-button-amber:hover{background:#d97706}
+.service-card-button-emerald{background:#10b981;color:#fff;border:none}
+.service-card-button-emerald:hover{background:#059669}
+.service-card-button-outline{background:transparent;color:#0f172a;border:1px solid #e2e8f0;padding:.5rem 1.5rem}
+.service-card-button-outline:hover{background:#f1f5f9}
+
+/* ===== FEATURED WATCHES ===== */
+.featured-watches-section{background:#f8fafc;padding:3rem 0}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
+.section-title{color:#0f172a;font-size:1.5rem;font-weight:700}
+.section-subtitle{color:#64748b;font-size:.875rem;margin-top:.25rem}
+.view-more-btn{display:inline-flex;align-items:center;gap:.5rem;color:#0f172a;background:transparent;border:1px solid #e2e8f0;border-radius:.375rem;padding:.5rem 1rem;font-size:.875rem;font-weight:500;transition:all .2s;cursor:pointer}
+.view-more-btn:hover{background:#f1f5f9}
+.view-more-btn svg{width:16px;height:16px}
+.watches-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+@media(min-width:768px){.watches-grid{grid-template-columns:repeat(4,1fr)}}
+.watch-card{background:#fff;border-radius:.75rem;overflow:hidden;border:1px solid #f1f5f9;transition:all .3s;cursor:pointer}
+.watch-card:hover{box-shadow:0 10px 15px -3px rgba(0,0,0,.1);transform:translateY(-2px)}
+.watch-image-wrapper{position:relative;aspect-ratio:1;overflow:hidden;background:#f8fafc}
+.watch-image{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.watch-card:hover .watch-image{transform:scale(1.05)}
+.badge-wrapper{position:absolute;top:.75rem;left:.75rem}
+.badge{background:#10b981;color:#fff;font-size:.7rem;font-weight:600;padding:.2rem .5rem;border-radius:.25rem}
+.watch-name{color:#0f172a;font-size:.875rem;font-weight:600;padding:.75rem .75rem .25rem;line-height:1.4}
+.watch-brand{color:#64748b;font-size:.75rem;padding:0 .75rem}
+.watch-price{color:#0f172a;font-size:1rem;font-weight:700;padding:.5rem .75rem .75rem}
+
+/* ===== RARE COLLECTIONS ===== */
+.rare-collections-section{background:#fff;padding:3rem 0}
+.badge-required{background:#fef3c7;color:#92400e;font-size:.75rem;font-weight:600;padding:.25rem .75rem;border-radius:9999px}
+.collections-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.collections-grid{grid-template-columns:repeat(2,1fr)}}
+.collection-card{position:relative;border-radius:.75rem;overflow:hidden;height:16rem;cursor:pointer}
+.collection-image{width:100%;height:100%;object-fit:cover}
+.collection-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.75rem;text-align:center;padding:1rem;transition:background .3s}
+.collection-card:hover .collection-overlay{background:rgba(0,0,0,.7)}
+.collection-overlay svg{width:32px;height:32px;color:rgba(255,255,255,.6)}
+.collection-name{color:#fff;font-size:1.25rem;font-weight:600}
+.collection-description{color:#cbd5e1;font-size:.875rem}
+.apply-btn{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:.375rem;padding:.5rem 1.5rem;font-size:.875rem;transition:all .2s;cursor:pointer}
+.apply-btn:hover{background:rgba(255,255,255,.1)}
+
+/* ===== VIP MEMBER ===== */
+.vip-member-section{background:#f8fafc;padding:3rem 0}
+.membership-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.membership-grid{grid-template-columns:repeat(3,1fr)}}
+.membership-card{position:relative;border-radius:.75rem;padding:2rem 1.5rem;overflow:hidden;border:1px solid transparent;transition:all .3s}
+.membership-card:hover{transform:translateY(-4px)}
+.card-bg-icon{position:absolute;top:1rem;right:1rem;opacity:.1}
+.card-bg-icon svg{width:64px;height:64px}
+.card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.tier-badge{width:2.5rem;height:2.5rem;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.875rem}
+.badge-silver{background:linear-gradient(135deg,#94a3b8,#cbd5e1);color:#fff}
+.badge-gold{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff}
+.badge-diamond{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+.tier-title{font-size:1.125rem;font-weight:600}
+.title-silver{color:#64748b}
+.title-gold{color:#b45309}
+.title-diamond{color:#6366f1}
+.tier-silver{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-color:#e2e8f0}
+.tier-gold{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a}
+.tier-diamond{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-color:#c7d2fe}
+.benefits-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
+.benefit-item{display:flex;align-items:center;gap:.5rem;font-size:.875rem;color:#334155}
+.benefit-item svg{width:16px;height:16px;color:#f59e0b;flex-shrink:0}
+.benefit-item.locked{color:#94a3b8}
+.benefit-item.locked svg{color:#94a3b8}
+.action-btn{width:100%;padding:.75rem;border-radius:.5rem;font-size:.875rem;font-weight:600;transition:all .2s;cursor:pointer}
+.btn-silver{background:#e2e8f0;color:#64748b;border:none}
+.btn-silver:hover{background:#cbd5e1}
+.btn-gold{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none}
+.btn-gold:hover{opacity:.9}
+.btn-diamond{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none}
+.btn-diamond:hover{opacity:.9}
+
+/* ===== APPOINTMENT ===== */
+.appointment-section{background:#fff;padding:3rem 0}
+.appointment-description{color:#334155;font-size:.875rem;line-height:1.75;margin-bottom:1.5rem}
+.reward-list{display:flex;flex-direction:column;gap:.75rem}
+.reward-item{display:flex;align-items:baseline;gap:.75rem;padding:1rem;background:#f8fafc;border-radius:.5rem;border:1px solid #f1f5f9}
+.reward-number{color:#f59e0b;font-weight:700;font-size:1rem}
+.reward-content{color:#334155;font-size:.875rem}
+
+/* ===== MARKET INSIGHTS ===== */
+.market-insights-section{background:#f8fafc;padding:3rem 0}
+.read-more-btn{display:inline-flex;align-items:center;gap:.5rem;color:#0f172a;background:transparent;border:1px solid #e2e8f0;border-radius:.375rem;padding:.5rem 1rem;font-size:.875rem;font-weight:500;transition:all .2s;cursor:pointer}
+.read-more-btn:hover{background:#f1f5f9}
+.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;min-height:100px}
+.article-card{background:#fff;border-radius:.75rem;overflow:hidden;border:1px solid #f1f5f9;transition:all .3s;cursor:pointer}
+.article-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+
+/* ===== FOOTER ===== */
+.main-footer{background:#0f172a;padding:3rem 0 2rem;color:#94a3b8}
+.footer-content{display:grid;grid-template-columns:1fr;gap:2rem}
+@media(min-width:768px){.footer-content{grid-template-columns:2fr 1fr 1fr 1fr}}
+.footer-brand{max-width:20rem}
+.brand-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.brand-logo svg{width:24px;height:24px;color:#f59e0b}
+.brand-text{display:flex;flex-direction:column}
+.brand-name{color:#fff;font-size:1.125rem;font-weight:700}
+.brand-subtitle{color:#64748b;font-size:.625rem;letter-spacing:.1em;text-transform:uppercase}
+.brand-description{color:#94a3b8;font-size:.875rem;line-height:1.625}
+.column-title{color:#fff;font-size:.875rem;font-weight:600;margin-bottom:1rem}
+.column-links{display:flex;flex-direction:column;gap:.5rem}
+.link-item{color:#94a3b8;font-size:.875rem;transition:color .2s;cursor:pointer}
+.link-item:hover{color:#fff}
+.language-switcher{position:relative}
+.language-current{display:flex;align-items:center;gap:.5rem;background:#1e293b;border:1px solid #334155;border-radius:.375rem;padding:.5rem .75rem;color:#94a3b8;font-size:.875rem;cursor:pointer;transition:all .2s}
+.language-current:hover{border-color:#475569}
+.language-icon{width:20px;height:20px;border-radius:50%}
+.language-name{flex:1}
+.dropdown-arrow{width:16px;height:16px}
+
+/* ===== LOGIN DIALOG ===== */
+.dialog-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:center}
+.login-dialog{background:#fff;border-radius:.5rem;width:100%;max-width:420px;padding:2rem;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-dialog h3{color:#0f172a;font-size:1.25rem;font-weight:600;margin-bottom:1.5rem}
+.login-dialog .close-btn{position:absolute;top:1rem;right:1rem;background:transparent;color:#94a3b8;font-size:1.25rem;padding:.25rem}
+.login-dialog .close-btn:hover{color:#0f172a}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;color:#334155;font-size:.875rem;font-weight:500;margin-bottom:.375rem}
+.form-group input{width:100%;padding:.625rem .75rem;border:1px solid #e2e8f0;border-radius:.375rem;font-size:.875rem;color:#0f172a;transition:border .2s;background:#fff}
+.form-group input:focus{border-color:#3b82f6;outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.form-group input::placeholder{color:#94a3b8}
+.code-row{display:flex;gap:.5rem}
+.code-row input{flex:1}
+.code-btn{background:#0f172a;color:#fff;padding:.625rem 1rem;border-radius:.375rem;font-size:.8rem;white-space:nowrap;transition:all .2s}
+.code-btn:hover{background:#1e293b}
+.code-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-submit{width:100%;padding:.75rem;background:#0f172a;color:#fff;border-radius:.375rem;font-size:1rem;font-weight:600;transition:all .2s;margin-top:.5rem}
+.login-submit:hover{background:#1e293b}
+.login-footer{text-align:center;margin-top:1rem;color:#64748b;font-size:.8rem}
+.login-footer a{color:#3b82f6;cursor:pointer}
+.login-footer a:hover{text-decoration:underline}
+
+/* ===== CART DIALOG ===== */
+.cart-dialog{position:fixed;z-index:1000;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid #e5e7eb;border-radius:.5rem;width:100%;max-width:calc(100% - 2rem);max-height:90vh;display:flex;flex-direction:column;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+@media(min-width:640px){.cart-dialog{max-width:600px}}
+.dialog-header{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid #e5e7eb;flex-shrink:0}
+.dialog-title{color:#0f172a;font-size:1.25rem;font-weight:600}
+.cart-content{flex:1;overflow-y:auto;padding:1rem;min-height:200px}
+.cart-item{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid #f1f5f9}
+.cart-item-img{width:80px;height:80px;border-radius:.5rem;object-fit:cover;background:#f8fafc}
+.cart-item-info{flex:1}
+.cart-item-name{color:#0f172a;font-size:.875rem;font-weight:600;margin-bottom:.25rem}
+.cart-item-size{color:#64748b;font-size:.75rem;margin-bottom:.5rem}
+.cart-item-price{color:#0f172a;font-weight:700}
+.cart-qty{display:flex;align-items:center;gap:.5rem;margin-top:.5rem}
+.cart-qty button{width:28px;height:28px;border:1px solid #e2e8f0;border-radius:.25rem;background:#fff;color:#0f172a;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.cart-qty button:hover{background:#f1f5f9}
+.cart-qty span{font-size:.875rem;min-width:1.5rem;text-align:center}
+.cart-footer{padding:1rem 1.5rem;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+.cart-total{font-size:1.125rem;font-weight:700;color:#0f172a}
+.checkout-btn{background:#0f172a;color:#fff;padding:.75rem 2rem;border-radius:.375rem;font-weight:600;transition:all .2s}
+.checkout-btn:hover{background:#1e293b}
+.cart-empty{text-align:center;padding:3rem 1rem;color:#94a3b8}
+
+/* ===== WATCH DETAIL DIALOG ===== */
+.detail-dialog{position:fixed;z-index:1000;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:.75rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.detail-close{position:absolute;top:1rem;right:1rem;z-index:10;background:rgba(0,0,0,.5);color:#fff;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.detail-close:hover{background:rgba(0,0,0,.7)}
+.detail-img{width:100%;aspect-ratio:1;object-fit:cover;background:#f8fafc}
+.detail-body{padding:1.5rem}
+.detail-body h2{color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
+.detail-body .desc{color:#64748b;font-size:.875rem;margin-bottom:1rem;line-height:1.5}
+.detail-body .price{color:#0f172a;font-size:1.5rem;font-weight:700;margin-bottom:1rem}
+.size-options{display:flex;gap:.5rem;margin-bottom:1.5rem}
+.size-btn{padding:.5rem 1rem;border:1px solid #e2e8f0;border-radius:.375rem;font-size:.875rem;color:#334155;background:#fff;transition:all .2s}
+.size-btn:hover{border-color:#94a3b8}
+.size-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}
+.detail-actions{display:flex;gap:.75rem}
+.detail-actions button{flex:1;padding:.75rem;border-radius:.375rem;font-size:.875rem;font-weight:600;transition:all .2s}
+.add-cart-btn{background:#fff;color:#0f172a;border:1px solid #e2e8f0}
+.add-cart-btn:hover{background:#f1f5f9}
+.buy-now-btn{background:#0f172a;color:#fff;border:none}
+.buy-now-btn:hover{background:#1e293b}
+
+/* ===== FLASH SALE ===== */
+.flash-sale-section{background:#fff;padding:3rem 0}
+.flash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
+.flash-title-row{display:flex;align-items:center;gap:1rem}
+.flash-badge{background:#ef4444;color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .75rem;border-radius:.25rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.countdown{display:flex;gap:.25rem;align-items:center}
+.countdown span{background:#0f172a;color:#fff;padding:.25rem .5rem;border-radius:.25rem;font-size:.875rem;font-weight:700;min-width:2rem;text-align:center}
+.countdown .sep{background:none;color:#0f172a;padding:0;min-width:auto;font-weight:700}
+
+/* ===== RECYCLING PAGE ===== */
+.recycling-section{padding:3rem 0}
+.recycling-hero{background:#0f172a;border-radius:.75rem;padding:3rem 2rem;text-align:center;margin-bottom:2rem;position:relative;overflow:hidden}
+.recycling-hero::before{content:'';position:absolute;inset:0;background:url('./images/bank-vault1-CPdDkRJ8.jpg') center/cover;opacity:.3}
+.recycling-hero *{position:relative;z-index:1}
+.recycling-hero h1{color:#fff;font-size:2rem;font-weight:700;margin-bottom:.5rem}
+.recycling-hero p{color:#94a3b8;font-size:1rem}
+.recycling-steps{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:2rem}
+@media(min-width:768px){.recycling-steps{grid-template-columns:repeat(4,1fr)}}
+.step-card{background:#f8fafc;border:1px solid #f1f5f9;border-radius:.75rem;padding:1.5rem;text-align:center}
+.step-num{width:2.5rem;height:2.5rem;background:#0f172a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-weight:700}
+.step-card h4{color:#0f172a;font-size:.875rem;font-weight:600;margin-bottom:.25rem}
+.step-card p{color:#64748b;font-size:.75rem}
+
+/* ===== LOGISTICS ===== */
+.logistics-section{padding:3rem 0}
+.track-form{background:#f8fafc;border:1px solid #f1f5f9;border-radius:.75rem;padding:2rem;margin-bottom:2rem}
+.track-form h3{color:#0f172a;font-weight:600;margin-bottom:1rem}
+.track-input-row{display:flex;gap:.75rem}
+.track-input-row input{flex:1;padding:.75rem;border:1px solid #e2e8f0;border-radius:.375rem;font-size:.875rem}
+.track-input-row button{background:#0f172a;color:#fff;padding:.75rem 1.5rem;border-radius:.375rem;font-weight:600;white-space:nowrap}
+
+/* ===== ACCOUNT ===== */
+.account-section{padding:3rem 0}
+.account-card{background:#f8fafc;border:1px solid #f1f5f9;border-radius:.75rem;padding:2rem;text-align:center}
+.account-avatar{width:64px;height:64px;border-radius:50%;background:#e2e8f0;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#64748b}
+.account-name{color:#0f172a;font-size:1.125rem;font-weight:600;margin-bottom:.25rem}
+.account-level{color:#f59e0b;font-size:.875rem}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;top:5rem;left:50%;transform:translateX(-50%);z-index:9999;background:#0f172a;color:#fff;padding:.75rem 1.5rem;border-radius:.5rem;font-size:.875rem;box-shadow:0 4px 12px rgba(0,0,0,.2);animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ===== MOBILE MENU ===== */
+.mobile-nav-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
+.mobile-nav{position:fixed;top:0;right:0;bottom:0;z-index:201;width:280px;background:#0f172a;padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1rem;transform:translateX(100%);transition:transform .3s ease}
+.mobile-nav.open{transform:translateX(0)}
+.mobile-nav .close-menu{align-self:flex-end;background:transparent;color:#fff;font-size:1.5rem;padding:.25rem}
+.mobile-nav a{color:#94a3b8;font-size:1rem;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.05);display:block;transition:color .2s}
+.mobile-nav a:hover,.mobile-nav a.active{color:#fff}
+
+/* ===== i18n TOGGLE ===== */
+.lang-toggle{position:fixed;bottom:1.5rem;right:1.5rem;z-index:99;background:#0f172a;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:9999px;padding:.5rem 1rem;font-size:.8rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.3);cursor:pointer;transition:all .2s}
+.lang-toggle:hover{background:#1e293b}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const {createApp,ref,computed,watch,onMounted,onUnmounted,provide,inject,nextTick} = Vue;
+const {createRouter,createWebHashHistory,useRoute,useRouter} = VueRouter;
+
+const IMG = './images/';
+const API_BASE = 'https://rolex.7s.com/store';
+const API_KEY = 'pk_344342d6aaf4';
+const REGION = 'reg_01KS6M12N8HQK';
+
+const msgs = {
+  zh:{
+    home:'首頁',flashSale:'限時搶購',recycling:'高價回收',logistics:'物流中心',
+    marketInsight:'市場洞察',account:'我的帳號',loginReg:'登錄 / 註冊',
+    announcement:'安全 · 可靠 · 透明｜長期營運 · 穩健交付,守護每一位會員權益',
+    heroTitle1:'時光恆久遠',heroDesc1:'探索頂級腕錶收藏，尊享時間藝術',heroBadge1:'ROLEX WATCH HOME',heroBtn1:'立即探索',
+    heroTitle2:'高價回收',heroDesc2:'專業鑑定，極速打款，讓您的閒置腕錶煥發新生',heroBadge2:'VALUE RECOVERY',heroBtn2:'免費估價',
+    serviceTitle:'腕錶服務中心',serviceSubtitle:'專業的資產管理與交易服務',
+    recovery:'高價回收',recoveryDesc:'極速估價，秒級打款',recoveryBtn:'立即回收',
+    tradeIn:'以舊換新',tradeInDesc:'上傳腕錶信息，一鍵置換心儀錶款',tradeInBtn:'上傳信息',
+    vault:'保值櫃',vaultDesc:'銀行級安全倉儲，資產可視化管理',vaultBtn:'存放管理',
+    featuredTitle:'精選腕錶',featuredSubtitle:'嚴選正品，品質保證',viewMore:'查看更多',
+    rareTitle:'珍稀藏品',rareAuth:'需認證',applyBtn:'申請查看權限',
+    rare1:'Daytona 鉑金款',rare1Desc:'計時巔峰 · 鉑金珍藏',
+    rare2:'Richard Mille RM 11-03',rare2Desc:'稀缺資源 · 需驗資查看',
+    vipTitle:'VIP 會員專區',vipSubtitle:'升級會員等級，解鎖專屬權益',
+    silver:'白銀會員',gold:'黃金會員',diamond:'黑鑽會員',
+    silverBen1:'每日簽到獎勵',silverBen2:'享受9.5折扣限時優惠',silverBen3:'解鎖腕錶S區（未解鎖）',
+    goldBen1:'累计完成充值$30000',goldBen2:'享受8.8折扣限時優惠',goldBen3:'預約充值獎勵',
+    diamondBen1:'累计完成充值$100000',diamondBen2:'享受VIP超級折扣限時優惠',diamondBen3:'品牌專櫃VIP優先定製/永遠保修權益',
+    currentTier:'當前等級',upgradeTier:'升級權益',contactUpgrade:'聯繫管家升級',
+    appointTitle:'預約充值活動',
+    appointDesc:'活動期間勞力士活動商城推出10億最新優惠活動回饋上架,預約返利禮包請聯繫商城線上客服。預約累計充值不同的金額贈送不同的現金到商城賬戶。',
+    reward1:'預約累計充值5000美金贈送888美金',reward2:'預約累計充值10000美金贈送1888美金',
+    reward3:'預約累計充值30000美金贈送3888美金',reward4:'預約累計充值50000美金贈送5888美金',
+    reward5:'預約累計充值100000美金贈送8888美金',
+    insightTitle:'市場洞察',readMore:'閱讀更多',
+    footerDesc:'全球領先的腕錶資產管理與交易平台。\n安全、透明、高效的價值流通中心。',
+    footerService:'平台服務',footerAbout:'關於我們',footerLang:'語言',
+    langName:'繁体中文',
+    aboutCompany:'公司簡介',aboutTerms:'用戶協議',aboutJoin:'加入我們',aboutPrivacy:'隱私政策',
+    logisticsQuery:'物流查詢',
+    login:'登錄',register:'註冊',phone:'手機號',password:'密碼',code:'驗證碼',
+    getCode:'獲取驗證碼',noAccount:'還沒有帳號？',forgotPwd:'忘記密碼',
+    cart:'購物車',checkout:'結算',total:'合計',emptyCart:'購物車為空',
+    addCart:'加入購物車',buyNow:'立即購買',added:'已加入購物車',
+    inStock:'現貨',
+    recyclingPage:'高價回收',recyclingSubtitle:'專業估價，極速回收',
+    step1:'提交信息',step1d:'上傳腕錶照片和詳情',step2:'專業鑑定',step2d:'資深鑑定師評估',
+    step3:'確認報價',step3d:'雙方確認回收價格',step4:'極速打款',step4d:'確認後即時到賬',
+    trackTitle:'物流查詢',trackPlaceholder:'輸入訂單號查詢',trackBtn:'查詢',
+    accountTitle:'我的帳號',guest:'訪客',loginToView:'登錄查看更多',
+  },
+  en:{
+    home:'Home',flashSale:'Flash Sale',recycling:'Recycling',logistics:'Logistics',
+    marketInsight:'Insights',account:'Account',loginReg:'Login / Register',
+    announcement:'Safe · Reliable · Transparent | Long-term Operations · Stable Delivery',
+    heroTitle1:'Timeless Elegance',heroDesc1:'Explore top watch collections, enjoy the art of time',heroBadge1:'ROLEX WATCH HOME',heroBtn1:'Explore Now',
+    heroTitle2:'High-Value Recycling',heroDesc2:'Professional appraisal, instant payment for your watches',heroBadge2:'VALUE RECOVERY',heroBtn2:'Free Appraisal',
+    serviceTitle:'Watch Service Center',serviceSubtitle:'Professional asset management & trading services',
+    recovery:'Recycling',recoveryDesc:'Fast appraisal, instant payment',recoveryBtn:'Recycle Now',
+    tradeIn:'Trade-In',tradeInDesc:'Upload watch info, one-click exchange',tradeInBtn:'Upload Info',
+    vault:'Value Vault',vaultDesc:'Bank-level secure storage, visual asset management',vaultBtn:'Store & Manage',
+    featuredTitle:'Featured Watches',featuredSubtitle:'Authentic selection, quality guaranteed',viewMore:'View More',
+    rareTitle:'Rare Collections',rareAuth:'Verified',applyBtn:'Apply for Access',
+    rare1:'Daytona Platinum',rare1Desc:'Chronograph pinnacle · Platinum treasure',
+    rare2:'Richard Mille RM 11-03',rare2Desc:'Scarce resource · Verification required',
+    vipTitle:'VIP Member Zone',vipSubtitle:'Upgrade your tier, unlock exclusive benefits',
+    silver:'Silver',gold:'Gold',diamond:'Diamond',
+    silverBen1:'Daily check-in rewards',silverBen2:'9.5% flash sale discount',silverBen3:'Unlock Watch S Zone (locked)',
+    goldBen1:'Total deposit $30,000',goldBen2:'8.8% flash sale discount',goldBen3:'Deposit bonus rewards',
+    diamondBen1:'Total deposit $100,000',diamondBen2:'VIP super flash sale discount',diamondBen3:'Brand VIP priority / lifetime warranty',
+    currentTier:'Current Tier',upgradeTier:'Upgrade',contactUpgrade:'Contact to Upgrade',
+    appointTitle:'Deposit Promotion',
+    appointDesc:'During the promotion, the Rolex store offers the latest offers. Contact online support for rebate packages.',
+    reward1:'Deposit $5,000 → bonus $888',reward2:'Deposit $10,000 → bonus $1,888',
+    reward3:'Deposit $30,000 → bonus $3,888',reward4:'Deposit $50,000 → bonus $5,888',
+    reward5:'Deposit $100,000 → bonus $8,888',
+    insightTitle:'Market Insights',readMore:'Read More',
+    footerDesc:'Global leading watch asset management & trading platform.\nSafe, transparent, efficient value circulation center.',
+    footerService:'Services',footerAbout:'About Us',footerLang:'Language',
+    langName:'English',
+    aboutCompany:'About',aboutTerms:'Terms',aboutJoin:'Careers',aboutPrivacy:'Privacy',
+    logisticsQuery:'Track Order',
+    login:'Login',register:'Register',phone:'Phone',password:'Password',code:'Code',
+    getCode:'Get Code',noAccount:'No account?',forgotPwd:'Forgot Password',
+    cart:'Cart',checkout:'Checkout',total:'Total',emptyCart:'Cart is empty',
+    addCart:'Add to Cart',buyNow:'Buy Now',added:'Added to cart',
+    inStock:'In Stock',
+    recyclingPage:'Recycling',recyclingSubtitle:'Professional appraisal, fast recycling',
+    step1:'Submit',step1d:'Upload watch photos & details',step2:'Appraisal',step2d:'Expert evaluation',
+    step3:'Confirm',step3d:'Agree on price',step4:'Payment',step4d:'Instant transfer',
+    trackTitle:'Track Order',trackPlaceholder:'Enter order number',trackBtn:'Track',
+    accountTitle:'My Account',guest:'Guest',loginToView:'Login to view more',
+  }
+};
+
+const MOCK_WATCHES = [
+  {id:'w1',title:'經典蠔式腕錶',brand:'蠔式恆動型',price:6200,img:IMG+'f6a8255e04a72c16dafc826fa3949abc.jpg'},
+  {id:'w2',title:'征服深海的腕錶',brand:'海使型',price:10800,img:IMG+'e29726ef5c672513e333e2ab635ae98d.jpg'},
+  {id:'w3',title:'為征服巔峰而設計的腕錶',brand:'探險家型',price:10800,img:IMG+'86a02c300ec52d994539e82c66ee97e2.jpg'},
+  {id:'w4',title:'經典雋永 · 風格現代',brand:'恆動系列',price:51250,img:IMG+'97ef37de5fde641eb11da611f1360eef.jpg'},
+];
+
+function fmtPrice(p){return '$ '+p.toLocaleString()}
+function toast(msg){
+  const d=document.createElement('div');d.className='toast';d.textContent=msg;
+  document.body.appendChild(d);setTimeout(()=>d.remove(),2000);
+}
+
+// ===== PAGES =====
+const HomePage = {
+  setup(){
+    const t = inject('t');
+    const lang = inject('lang');
+    const watches = inject('watches');
+    const openDetail = inject('openDetail');
+    const openLogin = inject('openLogin');
+    const slide = ref(0);
+    let timer = null;
+    const startAuto = ()=>{timer=setInterval(()=>{slide.value=(slide.value+1)%2},5000)};
+    const stopAuto = ()=>{if(timer)clearInterval(timer)};
+    const prevSlide = ()=>{stopAuto();slide.value=(slide.value-1+2)%2;startAuto()};
+    const nextSlide = ()=>{stopAuto();slide.value=(slide.value+1)%2;startAuto()};
+    onMounted(startAuto);
+    onUnmounted(stopAuto);
+    return {t,lang,watches,openDetail,openLogin,slide,prevSlide,nextSlide};
+  },
+  template:`
+  <div class="home-view">
+    <!-- Hero Carousel -->
+    <section class="hero-carousel-section">
+      <div class="hero-carousel-container">
+        <div class="hero-carousel-content">
+          <div class="hero-carousel-slides" :style="{transform:'translate3d(-'+slide*100+'%,0,0)'}">
+            <div class="hero-carousel-slide">
+              <div class="hero-carousel-slide-bg" :style="{backgroundImage:'url('+$options.IMG+'1e4ce99bba34482dffbfcf1df0a7c5ed.jpg)'}">
+                <div class="hero-carousel-slide-overlay"></div>
+              </div>
+              <div class="hero-carousel-slide-content">
+                <div class="hero-carousel-slide-inner">
+                  <div class="hero-carousel-badge-container">
+                    <span class="hero-carousel-badge">{{t('heroBadge1')}}</span>
+                    <div class="hero-carousel-divider"></div>
+                  </div>
+                  <h1 class="hero-carousel-title">{{t('heroTitle1')}}</h1>
+                  <p class="hero-carousel-description">{{t('heroDesc1')}}</p>
+                  <div class="hero-carousel-button-container">
+                    <button class="hero-carousel-button">{{t('heroBtn1')}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-carousel-slide">
+              <div class="hero-carousel-slide-bg" :style="{backgroundImage:'url('+$options.IMG+'92c364db87fb9355aadf96820c33cd8d.jpg)'}">
+                <div class="hero-carousel-slide-overlay"></div>
+              </div>
+              <div class="hero-carousel-slide-content">
+                <div class="hero-carousel-slide-inner">
+                  <div class="hero-carousel-badge-container">
+                    <span class="hero-carousel-badge">{{t('heroBadge2')}}</span>
+                    <div class="hero-carousel-divider"></div>
+                  </div>
+                  <h1 class="hero-carousel-title">{{t('heroTitle2')}}</h1>
+                  <p class="hero-carousel-description">{{t('heroDesc2')}}</p>
+                  <div class="hero-carousel-button-container">
+                    <button class="hero-carousel-button">{{t('heroBtn2')}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="hero-carousel-nav hero-carousel-nav-prev" @click="prevSlide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <button class="hero-carousel-nav hero-carousel-nav-next" @click="nextSlide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Service Center -->
+    <section class="service-center-section" id="service-center">
+      <div class="service-center-container">
+        <div class="service-center-header">
+          <h2 class="service-center-title">{{t('serviceTitle')}}</h2>
+          <p class="service-center-subtitle">{{t('serviceSubtitle')}}</p>
+        </div>
+        <div class="service-center-grid">
+          <div class="service-card service-card-recovery">
+            <div class="service-card-bg"><img :src="$options.IMG+'service-watch1-Qh3e4Kjj.jpg'" class="service-card-image"></div>
+            <div class="service-card-overlay"></div>
+            <div class="service-card-content">
+              <div class="service-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                <h3 class="service-card-title">{{t('recovery')}}</h3>
+                <p class="service-card-description">{{t('recoveryDesc')}}</p>
+              </div>
+              <button class="service-card-button service-card-button-amber">{{t('recoveryBtn')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            </div>
+          </div>
+          <div class="service-card service-card-trade">
+            <div class="service-card-icon-wrapper">
+              <img :src="$options.IMG+'photo_2026-01-16_16-26-12-CUgZGV-b.jpg'" class="service-card-icon service-card-icon-blue">
+            </div>
+            <h3 class="service-card-title service-card-title-dark">{{t('tradeIn')}}</h3>
+            <p class="service-card-description service-card-description-dark">{{t('tradeInDesc')}}</p>
+            <button class="service-card-button service-card-button-outline">{{t('tradeInBtn')}}</button>
+          </div>
+          <div class="service-card service-card-vault">
+            <div class="service-card-bg service-card-bg-vault" :style="{backgroundImage:'url('+$options.IMG+'bank-vault1-CPdDkRJ8.jpg)'}">
+              <div class="service-card-overlay service-card-overlay-vault"></div>
+            </div>
+            <div class="service-card-content">
+              <div class="service-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+                <h3 class="service-card-title">{{t('vault')}}</h3>
+                <p class="service-card-description">{{t('vaultDesc')}}</p>
+              </div>
+              <button class="service-card-button service-card-button-emerald">{{t('vaultBtn')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Watches -->
+    <section class="featured-watches-section">
+      <div class="container">
+        <div class="section-header">
+          <div><h2 class="section-title">{{t('featuredTitle')}}</h2><p class="section-subtitle">{{t('featuredSubtitle')}}</p></div>
+          <button class="view-more-btn">{{t('viewMore')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+        </div>
+        <div class="watches-grid">
+          <div class="watch-card" v-for="w in watches" :key="w.id" @click="openDetail(w)">
+            <div class="watch-image-wrapper">
+              <img :src="w.img||w.thumbnail||''" :alt="w.title" class="watch-image">
+              <div class="badge-wrapper"><span class="badge">{{t('inStock')}}</span></div>
+            </div>
+            <h3 class="watch-name">{{w.title}}</h3>
+            <p class="watch-brand">{{w.brand||''}}</p>
+            <p class="watch-price">{{$options.fmtPrice(w.price)}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rare Collections -->
+    <section class="rare-collections-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">{{t('rareTitle')}}</h2>
+          <span class="badge-required">{{t('rareAuth')}}</span>
+        </div>
+        <div class="collections-grid">
+          <div class="collection-card">
+            <img :src="$options.IMG+'771c468751942d9d559b433226cc09d3.jpg'" class="collection-image">
+            <div class="collection-overlay">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <h3 class="collection-name">{{t('rare1')}}</h3>
+              <p class="collection-description">{{t('rare1Desc')}}</p>
+              <button class="apply-btn" @click="openLogin">{{t('applyBtn')}}</button>
+            </div>
+          </div>
+          <div class="collection-card">
+            <img :src="$options.IMG+'36f32e105be36126c7ffa0a340a5c6cf.jpg'" class="collection-image">
+            <div class="collection-overlay">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <h3 class="collection-name">{{t('rare2')}}</h3>
+              <p class="collection-description">{{t('rare2Desc')}}</p>
+              <button class="apply-btn" @click="openLogin">{{t('applyBtn')}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIP -->
+    <section class="vip-member-section" id="vip-member-zone">
+      <div class="container">
+        <div class="section-header">
+          <div><h2 class="section-title">{{t('vipTitle')}}</h2><p class="section-subtitle">{{t('vipSubtitle')}}</p></div>
+        </div>
+        <div class="membership-grid">
+          <div class="membership-card tier-silver">
+            <div class="card-bg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+            <div class="card-header"><div class="tier-badge badge-silver">V1</div><h3 class="tier-title title-silver">{{t('silver')}}</h3></div>
+            <ul class="benefits-list">
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('silverBen1')}}</li>
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('silverBen2')}}</li>
+              <li class="benefit-item locked"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> {{t('silverBen3')}}</li>
+            </ul>
+            <button class="action-btn btn-silver">{{t('currentTier')}}</button>
+          </div>
+          <div class="membership-card tier-gold">
+            <div class="card-bg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg></div>
+            <div class="card-header"><div class="tier-badge badge-gold">V2</div><h3 class="tier-title title-gold">{{t('gold')}}</h3></div>
+            <ul class="benefits-list">
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('goldBen1')}}</li>
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('goldBen2')}}</li>
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('goldBen3')}}</li>
+            </ul>
+            <button class="action-btn btn-gold">{{t('upgradeTier')}}</button>
+          </div>
+          <div class="membership-card tier-diamond">
+            <div class="card-bg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg></div>
+            <div class="card-header"><div class="tier-badge badge-diamond">V3</div><h3 class="tier-title title-diamond">{{t('diamond')}}</h3></div>
+            <ul class="benefits-list">
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('diamondBen1')}}</li>
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('diamondBen2')}}</li>
+              <li class="benefit-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.77.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> {{t('diamondBen3')}}</li>
+            </ul>
+            <button class="action-btn btn-diamond">{{t('contactUpgrade')}}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Appointment -->
+    <section class="appointment-section">
+      <div class="container">
+        <h2 class="section-title">{{t('appointTitle')}}</h2>
+        <div class="appointment-content" style="margin-top:1.5rem">
+          <p class="appointment-description">{{t('appointDesc')}}</p>
+          <div class="reward-list">
+            <div class="reward-item" v-for="i in 5" :key="i"><span class="reward-number">{{i}}.</span><span class="reward-content">{{t('reward'+i)}}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Market Insights -->
+    <section class="market-insights-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">{{t('insightTitle')}}</h2>
+          <button class="read-more-btn">{{t('readMore')}}</button>
+        </div>
+        <div class="articles-grid">
+          <p style="color:#94a3b8;text-align:center;grid-column:1/-1;padding:2rem">— Coming Soon —</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  `,
+  IMG,fmtPrice
+};
+
+const FlashSalePage = {
+  setup(){const t=inject('t');const watches=inject('watches');const openDetail=inject('openDetail');return{t,watches,openDetail}},
+  template:`<div style="padding-top:1rem"><section class="flash-sale-section"><div class="container">
+    <div class="flash-header"><div class="flash-title-row"><h2 class="section-title">{{t('flashSale')}}</h2><span class="flash-badge">LIVE</span></div>
+    <div class="countdown"><span>23</span><span class="sep">:</span><span>59</span><span class="sep">:</span><span>59</span></div></div>
+    <div class="watches-grid"><div class="watch-card" v-for="w in watches" :key="w.id" @click="openDetail(w)">
+      <div class="watch-image-wrapper"><img :src="w.img||w.thumbnail||''" :alt="w.title" class="watch-image"><div class="badge-wrapper"><span class="badge" style="background:#ef4444">HOT</span></div></div>
+      <h3 class="watch-name">{{w.title}}</h3><p class="watch-brand">{{w.brand||''}}</p><p class="watch-price">{{$options.fmtPrice(w.price)}}</p>
+    </div></div></div></section></div>`,fmtPrice
+};
+
+const RecyclingPage = {
+  setup(){const t=inject('t');return{t}},
+  template:`<div style="padding-top:1rem"><section class="recycling-section"><div class="container">
+    <div class="recycling-hero"><h1>{{t('recyclingPage')}}</h1><p>{{t('recyclingSubtitle')}}</p></div>
+    <h3 class="section-title" style="margin-bottom:1rem">回收流程</h3>
+    <div class="recycling-steps">
+      <div class="step-card"><div class="step-num">1</div><h4>{{t('step1')}}</h4><p>{{t('step1d')}}</p></div>
+      <div class="step-card"><div class="step-num">2</div><h4>{{t('step2')}}</h4><p>{{t('step2d')}}</p></div>
+      <div class="step-card"><div class="step-num">3</div><h4>{{t('step3')}}</h4><p>{{t('step3d')}}</p></div>
+      <div class="step-card"><div class="step-num">4</div><h4>{{t('step4')}}</h4><p>{{t('step4d')}}</p></div>
+    </div>
+  </div></section></div>`
+};
+
+const LogisticsPage = {
+  setup(){const t=inject('t');return{t}},
+  template:`<div style="padding-top:1rem"><section class="logistics-section"><div class="container">
+    <h2 class="section-title" style="margin-bottom:1.5rem">{{t('trackTitle')}}</h2>
+    <div class="track-form"><h3>{{t('trackTitle')}}</h3><div class="track-input-row" style="margin-top:1rem">
+      <input :placeholder="t('trackPlaceholder')"><button>{{t('trackBtn')}}</button>
+    </div></div>
+  </div></section></div>`
+};
+
+const MarketInsightPage = {
+  setup(){const t=inject('t');return{t}},
+  template:`<div style="padding-top:1rem"><section class="market-insights-section" style="min-height:60vh"><div class="container">
+    <h2 class="section-title" style="margin-bottom:1.5rem">{{t('insightTitle')}}</h2>
+    <div class="articles-grid"><p style="color:#94a3b8;text-align:center;grid-column:1/-1;padding:3rem">— Coming Soon —</p></div>
+  </div></section></div>`
+};
+
+const AccountPage = {
+  setup(){
+    const t=inject('t');const isLogged=inject('isLogged');const userName=inject('userName');const openLogin=inject('openLogin');
+    return{t,isLogged,userName,openLogin}
+  },
+  template:`<div style="padding-top:1rem"><section class="account-section"><div class="container">
+    <h2 class="section-title" style="margin-bottom:1.5rem">{{t('accountTitle')}}</h2>
+    <div class="account-card">
+      <div class="account-avatar">{{isLogged?userName[0]:'?'}}</div>
+      <div class="account-name">{{isLogged?userName:t('guest')}}</div>
+      <div class="account-level" v-if="isLogged">V1 · {{t('silver')}}</div>
+      <button v-if="!isLogged" class="login-submit" style="margin-top:1rem;max-width:200px" @click="openLogin">{{t('login')}}</button>
+      <p v-if="!isLogged" style="color:#94a3b8;margin-top:.5rem;font-size:.875rem">{{t('loginToView')}}</p>
+    </div>
+  </div></section></div>`
+};
+
+// ===== ROUTER =====
+const routes = [
+  {path:'/',component:HomePage},
+  {path:'/flash-sale',component:FlashSalePage},
+  {path:'/recycling',component:RecyclingPage},
+  {path:'/logistics',component:LogisticsPage},
+  {path:'/market-insight',component:MarketInsightPage},
+  {path:'/account',component:AccountPage},
+];
+const router = createRouter({history:createWebHashHistory(),routes});
+
+// ===== APP =====
+const app = createApp({
+  setup(){
+    const lang = ref(localStorage.getItem('rlang')||'zh');
+    const t = (key)=>msgs[lang.value]?.[key]||msgs['zh'][key]||key;
+    const toggleLang = ()=>{lang.value=lang.value==='zh'?'en':'zh';localStorage.setItem('rlang',lang.value)};
+
+    const route = useRoute();
+    const routerInstance = useRouter();
+    const currentPath = computed(()=>route.path);
+
+    const watches = ref([...MOCK_WATCHES]);
+    const cart = ref(JSON.parse(localStorage.getItem('rcart')||'[]'));
+    const cartOpen = ref(false);
+    const detailOpen = ref(false);
+    const detailP = ref(null);
+    const loginOpen = ref(false);
+    const isLogged = ref(!!localStorage.getItem('ruser'));
+    const userName = ref(localStorage.getItem('ruser')||'');
+    const mobileMenuOpen = ref(false);
+    const selectedSize = ref('41mm');
+
+    watch(cart,(v)=>localStorage.setItem('rcart',JSON.stringify(v)),{deep:true});
+
+    const cartTotal = computed(()=>cart.value.reduce((s,i)=>s+i.price*i.qty,0));
+
+    const openDetail = (w)=>{detailP.value=w;detailOpen.value=true;selectedSize.value='41mm'};
+    const closeDetail = ()=>{detailOpen.value=false};
+    const openLogin = ()=>{loginOpen.value=true};
+    const closeLogin = ()=>{loginOpen.value=false};
+
+    const addToCart = (w)=>{
+      const existing = cart.value.find(i=>i.id===w.id&&i.size===selectedSize.value);
+      if(existing){existing.qty++}
+      else{cart.value.push({id:w.id,title:w.title,price:w.price,img:w.img||w.thumbnail||'',size:selectedSize.value,qty:1})}
+      toast(t('added'));
+    };
+
+    const doLogin = (phone)=>{
+      if(!phone){toast('Please enter phone');return}
+      userName.value=phone;isLogged.value=true;localStorage.setItem('ruser',phone);loginOpen.value=false;
+      toast(t('login')+' OK');
+    };
+    const doLogout = ()=>{userName.value='';isLogged.value=false;localStorage.removeItem('ruser')};
+
+    // Fetch from API
+    onMounted(async()=>{
+      try{
+        const r=await fetch(API_BASE+'/products?limit=10&region_id='+REGION,{headers:{'x-publishable-api-key':API_KEY}});
+        const d=await r.json();
+        if(d.products&&d.products.length){
+          watches.value=d.products.map(p=>({
+            id:p.id,title:p.title,brand:p.subtitle||'',
+            price:p.variants?.[0]?.prices?.[0]?.amount?p.variants[0].prices[0].amount/100:0,
+            img:p.thumbnail||p.images?.[0]?.url||''
+          }));
+        }
+      }catch(e){/* fallback to MOCK_WATCHES */}
+    });
+
+    provide('t',t);provide('lang',lang);provide('watches',watches);
+    provide('openDetail',openDetail);provide('openLogin',openLogin);
+    provide('isLogged',isLogged);provide('userName',userName);
+
+    return {
+      t,lang,toggleLang,currentPath,routerInstance,
+      watches,cart,cartOpen,cartTotal,detailOpen,detailP,selectedSize,
+      loginOpen,isLogged,userName,mobileMenuOpen,
+      openDetail,closeDetail,addToCart,openLogin,closeLogin,doLogin,doLogout,fmtPrice
+    };
+  },
+  template:`
+  <div class="main-layout">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="nav-bar">
+        <div class="container">
+          <a href="#/" class="logo">
+            <img src="./images/logo.png" alt="Rolex" class="logo-icon1">
+            <div class="logo-text"><span class="logo-main">Rolex</span><span class="logo-sub">WATCH HOME</span></div>
+          </a>
+          <nav class="nav-links">
+            <a href="#/" class="nav-link" :class="{active:currentPath==='/'}">{{t('home')}}</a>
+            <a href="#/flash-sale" class="nav-link" :class="{active:currentPath==='/flash-sale'}">{{t('flashSale')}}</a>
+            <a href="#/recycling" class="nav-link" :class="{active:currentPath==='/recycling'}">{{t('recycling')}}</a>
+            <a href="#/logistics" class="nav-link" :class="{active:currentPath==='/logistics'}">{{t('logistics')}}</a>
+            <a href="#/market-insight" class="nav-link" :class="{active:currentPath==='/market-insight'}">{{t('marketInsight')}}</a>
+            <a href="#/account" class="nav-link" :class="{active:currentPath==='/account'}">{{t('account')}}</a>
+          </nav>
+          <div class="user-actions">
+            <button class="login-btn" v-if="!isLogged" @click="loginOpen=true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              {{t('loginReg')}}
+            </button>
+            <button class="login-btn" v-else @click="cartOpen=true" style="position:relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+              {{t('cart')}} <span v-if="cart.length" style="background:#ef4444;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.7rem;display:inline-flex;align-items:center;justify-content:center">{{cart.length}}</span>
+            </button>
+            <button class="mobile-menu-btn" @click="mobileMenuOpen=true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="announcement-bar">
+        <div class="container">
+          <div class="announcement-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+            <div class="announcement-text-wrapper"><span class="announcement-text">{{t('announcement')}}</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="main-header-placeholder"></div>
+
+    <!-- Router View -->
+    <router-view></router-view>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column footer-brand">
+            <div class="brand-logo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#f59e0b"><circle cx="12" cy="12" r="6"/><polyline points="12 10 12 12 13 13"/><path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05"/><path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05"/></svg>
+              <div class="brand-text"><span class="brand-name">Rolex</span><span class="brand-subtitle">WATCH HOME</span></div>
+            </div>
+            <p class="brand-description">{{t('footerDesc')}}</p>
+          </div>
+          <div class="footer-column">
+            <h4 class="column-title">{{t('footerService')}}</h4>
+            <ul class="column-links">
+              <li><a href="#/flash-sale" class="link-item">{{t('flashSale')}}</a></li>
+              <li><a href="#/recycling" class="link-item">{{t('recycling')}}</a></li>
+              <li><a href="#/logistics" class="link-item">{{t('logisticsQuery')}}</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4 class="column-title">{{t('footerAbout')}}</h4>
+            <ul class="column-links">
+              <li><a class="link-item">{{t('aboutCompany')}}</a></li>
+              <li><a class="link-item">{{t('aboutTerms')}}</a></li>
+              <li><a class="link-item">{{t('aboutJoin')}}</a></li>
+              <li><a class="link-item">{{t('aboutPrivacy')}}</a></li>
+            </ul>
+          </div>
+          <div class="footer-column footer-column-language">
+            <h4 class="column-title">{{t('footerLang')}}</h4>
+            <div class="language-switcher">
+              <button class="language-current" @click="toggleLang">
+                <span class="language-name">{{t('langName')}}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Menu -->
+    <div v-if="mobileMenuOpen" class="mobile-nav-overlay" @click="mobileMenuOpen=false"></div>
+    <nav class="mobile-nav" :class="{open:mobileMenuOpen}">
+      <button class="close-menu" @click="mobileMenuOpen=false">&times;</button>
+      <a href="#/" @click="mobileMenuOpen=false" :class="{active:currentPath==='/'}">{{t('home')}}</a>
+      <a href="#/flash-sale" @click="mobileMenuOpen=false" :class="{active:currentPath==='/flash-sale'}">{{t('flashSale')}}</a>
+      <a href="#/recycling" @click="mobileMenuOpen=false" :class="{active:currentPath==='/recycling'}">{{t('recycling')}}</a>
+      <a href="#/logistics" @click="mobileMenuOpen=false" :class="{active:currentPath==='/logistics'}">{{t('logistics')}}</a>
+      <a href="#/market-insight" @click="mobileMenuOpen=false" :class="{active:currentPath==='/market-insight'}">{{t('marketInsight')}}</a>
+      <a href="#/account" @click="mobileMenuOpen=false" :class="{active:currentPath==='/account'}">{{t('account')}}</a>
+      <a @click="mobileMenuOpen=false;loginOpen=true" v-if="!isLogged">{{t('loginReg')}}</a>
+      <a @click="mobileMenuOpen=false;cartOpen=true" v-if="isLogged">{{t('cart')}} ({{cart.length}})</a>
+    </nav>
+
+    <!-- Login Dialog -->
+    <div v-if="loginOpen" class="dialog-overlay" @click.self="closeLogin">
+      <div class="login-dialog">
+        <button class="close-btn" @click="closeLogin">&times;</button>
+        <h3>{{t('login')}}</h3>
+        <div class="form-group"><label>{{t('phone')}}</label><input id="login-phone" placeholder=""></div>
+        <div class="form-group"><label>{{t('password')}}</label><input type="password" placeholder=""></div>
+        <div class="form-group"><label>{{t('code')}}</label><div class="code-row"><input placeholder=""><button class="code-btn">{{t('getCode')}}</button></div></div>
+        <button class="login-submit" @click="doLogin(document.getElementById('login-phone').value)">{{t('login')}}</button>
+        <div class="login-footer">{{t('noAccount')}} <a @click="">{{t('register')}}</a> | <a @click="">{{t('forgotPwd')}}</a></div>
+      </div>
+    </div>
+
+    <!-- Cart Dialog -->
+    <div v-if="cartOpen" class="dialog-overlay" @click.self="cartOpen=false">
+      <div class="cart-dialog">
+        <div class="dialog-header"><span class="dialog-title">{{t('cart')}}</span><button class="close-btn" @click="cartOpen=false" style="position:static;font-size:1.25rem">&times;</button></div>
+        <div class="cart-content">
+          <div v-if="!cart.length" class="cart-empty">{{t('emptyCart')}}</div>
+          <div v-for="(item,i) in cart" :key="i" class="cart-item">
+            <img :src="item.img" class="cart-item-img">
+            <div class="cart-item-info">
+              <div class="cart-item-name">{{item.title}}</div>
+              <div class="cart-item-size">{{item.size}}</div>
+              <div class="cart-item-price">{{fmtPrice(item.price)}}</div>
+              <div class="cart-qty">
+                <button @click="item.qty>1?item.qty--:cart.splice(i,1)">-</button>
+                <span>{{item.qty}}</span>
+                <button @click="item.qty++">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cart-footer" v-if="cart.length">
+          <span class="cart-total">{{t('total')}}: {{fmtPrice(cartTotal)}}</span>
+          <button class="checkout-btn">{{t('checkout')}}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Watch Detail Dialog -->
+    <div v-if="detailOpen&&detailP" class="dialog-overlay" @click.self="closeDetail">
+      <div class="detail-dialog">
+        <button class="detail-close" @click="closeDetail">&times;</button>
+        <img :src="detailP.img||detailP.thumbnail||''" class="detail-img">
+        <div class="detail-body">
+          <h2>{{detailP.title}}</h2>
+          <p class="desc">{{detailP.brand||''}}</p>
+          <div class="price">{{fmtPrice(detailP.price)}}</div>
+          <div class="size-options">
+            <button v-for="s in ['36mm','39mm','41mm','44mm']" :key="s" class="size-btn" :class="{active:selectedSize===s}" @click="selectedSize=s">{{s}}</button>
+          </div>
+          <div class="detail-actions">
+            <button class="add-cart-btn" @click="addToCart(detailP)">{{t('addCart')}}</button>
+            <button class="buy-now-btn" @click="addToCart(detailP);cartOpen=true;closeDetail()">{{t('buyNow')}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lang Toggle -->
+    <button class="lang-toggle" @click="toggleLang">{{lang==='zh'?'EN':'中文'}}</button>
+  </div>
+  `
+});
+
+app.use(router);
+app.mount('#app');
+</script>
+</body>
+</html>
